@@ -1,6 +1,6 @@
 # DAAF for OMP (Oh My Pi)
 
-This is a port of the [Data Analyst Augmentation Framework (DAAF)](https://github.com/DAAF-Contribution-Community/daaf) from Claude Code to OMP (Oh My Pi).
+This is a port of the [Data Analyst Augmentation Framework (DAAF)](https://github.com/DAAF-Contribution-Community/daaf) from Claude Code to OMP (Oh My Pi). **This port diverges from the original**: Claude Code‑specific hooks (permissions, model‑ceiling, etc.) were deliberately omitted — they have no equivalent in OMP and would be dead code.
 
 ## What is DAAF?
 
@@ -13,12 +13,11 @@ daaf-omp/
 ├── .omp/
 │   ├── AGENTS.md                    # Project context (ported from CLAUDE.md)
 │   ├── config.yml                   # OMP config: extensions list, settings
-│   ├── extensions/                  # 14 OMP extensions (ported from .claude/hooks/*.sh)
+│   ├── extensions/                  # 13 OMP extensions (ported from .claude/hooks/*.sh)
 │   │   ├── daaf-hook-runner.ts       # Shared helper: spawns shell hooks with JSON stdin
 │   │   ├── daaf-bash-safety.ts       # Blocks dangerous bash commands
 │   │   ├── daaf-enforce-single-command.ts  # Blocks command chaining (&&, ;, ||)
 │   │   ├── daaf-enforce-file-first.ts      # Enforces run_with_capture.sh wrapper
-│   │   ├── daaf-enforce-model-ceiling.ts   # Cost-control: blocks model tier escalation
 │   │   ├── daaf-audit-log.ts               # Audit trail logging
 │   │   ├── daaf-output-scanner.ts          # Secret detection in tool output
 │   │   ├── daaf-context-reporter.ts        # Context utilization injection
@@ -31,8 +30,8 @@ daaf-omp/
 │   │   └── daaf-statusline.ts              # Live status bar (model, dir, ctx usage)
 │   ├── hooks/                       # 13 shell hooks (safety logic, invoked by extensions)
 │   ├── skills/                      # 36 skills (data sources, methods, tools)
-│   └── agents/                      # 15 agent definition files (behavioral protocols)
-├── agent_reference/                 # 23 reference docs (templates, workflows, checkpoints)
+│   └── agents/                      # 14 agent definition files (behavioral protocols)
+├── agent_reference/                 # 22 reference docs (templates, workflows, checkpoints)
 └── scripts/                         # Utility scripts (run_with_capture.sh, log viewer, etc.)
 ```
 
@@ -91,7 +90,7 @@ If you want to run DAAF directly inside this repository:
 # From this directory, launch OMP
 omp
 ```
-The 14 extensions load automatically, 36 skills are discovered, and `.omp/AGENTS.md` provides the DAAF context.
+The 13 extensions load automatically, 36 skills are discovered, and `.omp/AGENTS.md` provides the DAAF context.
 
 ### Option B: Install as an OMP Plugin (Global/Project Mode)
 To use DAAF extensions and safety hooks in an existing OMP project, install it as a plugin:
@@ -103,7 +102,7 @@ omp plugin install github:DAAF-Contribution-Community/daaf-omp
 omp plugin link /path/to/daaf-omp
 ```
 
-This registers and loads all 14 TS extensions and shell hooks. To fully utilize the DAAF agents and skills, you should copy the respective `.omp/agents/`, `.omp/skills/`, and `.omp/AGENTS.md` files into your project's `.omp/` folder.
+This registers and loads all 13 TS extensions and shell hooks. To fully utilize the DAAF agents and skills, you should copy the respective `.omp/agents/`, `.omp/skills/`, and `.omp/AGENTS.md` files into your project's `.omp/` folder.
 
 You can automate this configuration copy by running the local setup utility:
 ```bash
@@ -113,10 +112,10 @@ You can automate this configuration copy by running the local setup utility:
 
 ## Verification
 
-- All 15 extension TS files pass `bun --check` (syntax valid)
+- All 13 extension TS files pass `bun --check` (syntax valid)
 - All 13 shell hooks pass `bash -n` (syntax valid)
 - `run_with_capture.sh` tested end-to-end: executes Python, captures output, appends execution log
-- `config.yml` is valid YAML with 14 extensions registered
+- `config.yml` is valid YAML with 13 extensions registered
 - 36 skills discovered from `.omp/skills/*/SKILL.md`
 - 14 agents discovered from `.omp/agents/*.md` with valid frontmatter (name, description, tools, model)
 - No residual functional Claude Code path references (only porting-origin comments remain)
