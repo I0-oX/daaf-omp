@@ -7,7 +7,7 @@ description: >
   Stage 3.5 when multiple sources have been explored and findings need
   integration before Plan creation.
 model: pi/task  # DAAF tier: sonnet
-tools: read,write,edit,bash,glob,grep,yield
+tools: read,write,edit,glob,grep,yield
 ---
 
 # Research Synthesizer Agent

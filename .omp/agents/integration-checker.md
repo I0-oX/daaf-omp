@@ -5,7 +5,7 @@ description: >
   verifying file references resolve, and detecting orphaned components. Invoked by
   orchestrator at Stages 9, 11, and 12 to confirm end-to-end pipeline wiring.
 model: pi/task  # DAAF tier: sonnet
-tools: read,bash,glob,grep,yield
+tools: read,glob,grep,yield
 ---
 
 # Integration Checker Agent

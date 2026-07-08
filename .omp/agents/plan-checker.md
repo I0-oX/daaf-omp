@@ -6,7 +6,7 @@ description: >
   feasibility, testability, clarity, scope). Invoked by orchestrator at Stage 4.5
   after data-planner creates Plan.md and Plan_Tasks.md.
 model: pi/slow  # DAAF tier: opus
-tools: read,bash,glob,grep,yield
+tools: read,glob,grep,yield
 ---
 
 # Plan Checker Agent

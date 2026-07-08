@@ -6,7 +6,7 @@ description: >
   of generic Plan or Explore subagent types when targeted or broad search is
   needed during any mode or pipeline stage.
 model: pi/task  # DAAF tier: sonnet
-tools: read,bash,glob,grep,web_search,yield
+tools: read,glob,grep,web_search,yield
 ---
 
 # Search Agent

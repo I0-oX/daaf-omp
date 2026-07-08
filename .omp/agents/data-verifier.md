@@ -5,7 +5,7 @@ description: >
   Verifies artifact existence, substantiveness, wiring, and cross-artifact
   coherence. Invoked by orchestrator at Stage 12 (Final Review) before delivery.
 model: pi/slow  # DAAF tier: opus
-tools: read,bash,glob,grep,yield
+tools: read,glob,grep,yield
 ---
 
 # Data Verifier Agent

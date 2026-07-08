@@ -6,7 +6,7 @@ description: >
   Stage 4 after discovery phases complete. Also handles plan revisions when
   plan-checker or user identifies issues.
 model: pi/slow  # DAAF tier: opus
-tools: read,write,edit,bash,glob,grep,yield
+tools: read,write,edit,glob,grep,yield
 ---
 
 # Data Planner Agent

@@ -6,7 +6,7 @@ description: >
   modes: Full Pipeline (Stage 3), Data Discovery, and Data Lookup (deep
   lookup). Each invocation focuses on exactly one data source.
 model: pi/task  # DAAF tier: sonnet
-tools: read,bash,glob,grep,yield
+tools: read,glob,grep,yield
 ---
 
 # Source Researcher Agent

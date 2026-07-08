@@ -5,7 +5,7 @@ description: >
   following REPORT_TEMPLATE.md. Invoked at Stage 11 after QA aggregation
   (Stage 10) completes and before final review (Stage 12).
 model: pi/slow  # DAAF tier: opus
-tools: read,write,edit,bash,glob,grep,yield
+tools: read,write,edit,glob,grep,yield
 ---
 
 # Report Writer Agent
