@@ -1,0 +1,325 @@
+# User Support Mode
+
+Conversational guidance for users who have questions about DAAF itself and the tools it runs on (Docker, Git, OMP) -- what it is, how it works, what to expect, how to troubleshoot, and how to get the most out of it. The orchestrator responds directly using pre-loaded documentation and can consult authoritative external docs online when needed; no subagents, workspaces, or formal deliverables are produced. This is the only mode where DAAF and its technology stack are the subject, not data or analysis.
+
+## User Orientation
+
+After mode confirmation, briefly orient the user:
+
+- This mode is for questions about DAAF itself and the tools it runs on (Docker, Git, OMP) -- how it works, what it can do, what to expect, how to troubleshoot, and how to get the most out of it
+- I've loaded the core documentation and can also look up official Docker, Git, and OMP docs online when needed
+- Ask anything -- there are no checkpoints, no formal outputs, just a conversation
+- If at any point you realize you want to do something specific (run an analysis, look up data, debug a script), just say so and I'll switch to the right mode
+
+**When to skip:** User has asked a single, clearly scoped question that can be answered immediately without extended conversation.
+
+**For more detail:** Consult `{BASE_DIR}/user_reference/02_understanding_daaf.md`.
+
+---
+
+## User Support Workflow
+
+User Support is the simplest mode in DAAF. The orchestrator responds directly to every question using pre-loaded documentation and framework knowledge. There is no stage progression, no subagent dispatch, and no artifacts produced.
+
+```
+┌─────────────────────────────────────┐
+│   User asks about DAAF              │
+└──────────────────┬──────────────────┘
+                   │
+┌──────────────────▼──────────────────┐
+│   Orchestrator reads relevant       │
+│   section from pre-loaded docs      │
+│   or framework reference index      │
+└──────────────────┬──────────────────┘
+                   │
+┌──────────────────▼──────────────────┐
+│   Orchestrator responds directly    │
+│   in plain, educational language    │
+└──────────────────┬──────────────────┘
+                   │
+                   ▼
+      [User continues, changes topic,
+       or transitions to another mode]
+```
+
+There are no mandatory checkpoints, gates, or phase transitions. The user drives the conversation. The orchestrator's only job is to help the user understand DAAF and, when appropriate, guide them toward the mode that fits their actual need.
+
+---
+
+## Documentation Loading Protocol
+
+**On mode entry**, the orchestrator reads these four documents in full (parallel reads):
+
+| Document | Purpose | Path |
+|----------|---------|------|
+| README | Project overview, capabilities, mode table, architecture summary | `{BASE_DIR}/README.md` |
+| Installation & Quick Start | Setup, prerequisites, troubleshooting, day-to-day workflow | `{BASE_DIR}/user_reference/01_installation_and_quickstart.md` |
+| Understanding DAAF | Context windows, modes, mental model, anatomy of an analysis, session management | `{BASE_DIR}/user_reference/02_understanding_daaf.md` |
+| Best Practices | Effective prompts, reviewing output, human oversight, appropriate use | `{BASE_DIR}/user_reference/03_best_practices.md` |
+
+These documents total approximately 2,000 lines and provide comprehensive coverage of the most common user questions. The orchestrator should be thoroughly familiar with their contents before responding to any question.
+
+**Context budget note:** Loading these four documents consumes approximately 8,000-12,000 tokens of orchestrator context. This is acceptable because User Support does not dispatch subagents, load skills, or accumulate execution artifacts -- the documentation *is* the working material.
+
+---
+
+## Framework Internals Reference Index
+
+For questions that go beyond the four pre-loaded documents -- questions about DAAF's internal architecture, specific agents, skills, templates, or configuration -- the orchestrator consults the following on demand. This index is organized by question category so the orchestrator knows exactly where to look.
+
+### Modes and Workflow
+
+| Question About | Where to Look |
+|----------------|---------------|
+| How a specific mode works | `.omp/skills/daaf-orchestrator/references/{mode-name}-mode.md` |
+| Mode routing and classification | `.omp/skills/daaf-orchestrator/SKILL.md` > Mode Decision Framework |
+| What happens at each pipeline stage | `agent_reference/WORKFLOW_PHASE1_DISCOVERY.md` through `WORKFLOW_PHASE5_SYNTHESIS.md` |
+| Session recovery / resuming work | `.omp/skills/daaf-orchestrator/references/session-recovery.md` |
+| Error recovery protocols | `agent_reference/ERROR_RECOVERY.md` |
+
+### Agents and Subagents
+
+| Question About | Where to Look |
+|----------------|---------------|
+| What agents exist and when each is used | `.omp/agents/README.md` (Agent Index, When to Use, Coordination Matrix) |
+| How a specific agent behaves | `.omp/agents/{agent-name}.md` |
+| Agent boundaries and constraints | `agent_reference/BOUNDARIES.md` |
+
+### Skills and Domain Knowledge
+
+| Question About | Where to Look |
+|----------------|---------------|
+| What skills are available | System skill inventory (visible in orchestrator context) |
+| How skills work (loading, authoring) | `.omp/skills/` directory; `skill-authoring` skill |
+| Data source coverage | Skills prefixed with `education-data-source-*` |
+| Methodology and tool skills | Skills like `data-scientist`, `polars`, `plotnine`, `statsmodels`, `pyfixest`, etc. |
+
+### Templates and Reference Files
+
+| Question About | Where to Look |
+|----------------|---------------|
+| Plan structure and content | `agent_reference/PLAN_TEMPLATE.md` |
+| Report structure and content | `agent_reference/REPORT_TEMPLATE.md` |
+| Script execution protocol | `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` |
+| Inline audit trail standards | `agent_reference/INLINE_AUDIT_TRAIL.md` |
+| QA checkpoint definitions | `agent_reference/QA_CHECKPOINTS.md` |
+| Validation checkpoint code | `agent_reference/VALIDATION_CHECKPOINTS.md` |
+| AI disclosure and attribution | `agent_reference/AI_DISCLOSURE_REFERENCE.md` |
+| Citation practices | `agent_reference/CITATION_REFERENCE.md` |
+| State file templates | `agent_reference/STATE_TEMPLATE.md`, `agent_reference/STATE_TEMPLATE_ONBOARDING.md` |
+| Reproduction report template | `agent_reference/REPRODUCTION_REPORT_TEMPLATE.md` |
+| Full reference file index | `AGENTS.md` > Reference Files table |
+
+### Configuration and Safety
+
+| Question About | Where to Look |
+|----------------|---------------|
+| Project conventions and code style | `AGENTS.md` > Execution Philosophy, Code Style, Project Conventions |
+| Safety boundaries and guardrails | `AGENTS.md` > Boundaries & Safety |
+| Hook configuration | `.omp/config.yml` (structure only -- do not expose secrets) |
+| Extension model (adding skills, agents, modes) | `user_reference/04_extending_daaf.md` |
+
+### Setup and Underlying Technology
+
+Users frequently have questions about the tools DAAF runs on, not just DAAF itself. The pre-loaded `01_installation_and_quickstart.md` covers setup and basic usage. For deeper questions, consult these sources:
+
+| Question About | Where to Look (local) | Authoritative External Docs |
+|----------------|----------------------|----------------------------|
+| Docker setup, container management, resource allocation, security | `user_reference/01_installation_and_quickstart.md`, `user_reference/07_faq_technical.md` | https://docs.docker.com/reference/ |
+| Git usage, version control, diffs, commits | `user_reference/01_installation_and_quickstart.md`, `user_reference/03_best_practices.md` | https://git-scm.com/docs |
+| OMP features, configuration, model selection, IDE integration | `user_reference/07_faq_technical.md`, `user_reference/01_installation_and_quickstart.md` | https://omp.dev/docs/en/overview |
+| Running without Docker, alternative AI providers | `user_reference/07_faq_technical.md` | — |
+| Python packages used by DAAF (Polars, Marimo, etc.) | Relevant tool skill (loaded by subagents in other modes) | — |
+
+**When to use WebSearch/WebFetch:** If a user's question goes beyond what the local documentation covers -- specific Docker commands, Git workflows, OMP features not documented in DAAF's files -- use WebSearch or WebFetch to consult the authoritative external docs listed above. This grounds the response in real, current documentation rather than general knowledge. Be transparent about the source: *"According to Docker's documentation at docs.docker.com..."*
+
+### Philosophy and Community
+
+| Question About | Where to Look |
+|----------------|---------------|
+| Why DAAF exists, design philosophy | `user_reference/06_faq_philosophy.md` |
+| Technical FAQ and troubleshooting | `user_reference/07_faq_technical.md` |
+| Contributing to DAAF | `CONTRIBUTING.md` |
+
+**On-demand reading protocol:** When a user's question requires information from the index above, read the relevant file or section before responding. Prefer reading the full file when it is of reasonable length (under ~500 lines); use targeted reads with generous context for longer files. Summarize findings in plain, educational language -- never paste raw framework content at the user. When external documentation is consulted via WebSearch/WebFetch, cite the source URL so the user can read further on their own.
+
+---
+
+## Update Conflict Resolution Walkthrough
+
+When a user enters OMP with a prompt starting with "User support mode" and
+mentioning DAAF update conflicts, this is a structured handoff from the
+`update_daaf` script. The update script launched OMP via
+`docker compose exec -it` and is waiting for the user to type `/exit` so the
+script can complete its remaining post-update steps.
+
+### Conflict types
+
+The user's prompt will indicate one of three conflict types. The resolution
+walkthrough (steps 1–5 below) is the same for all three — only the completion
+command in step 4 differs.
+
+| Prompt mentions | What happened | Completion command (step 4) |
+|-----------------|---------------|---------------------------|
+| "merge conflicts" | User chose merge; upstream and local commits changed the same files | `git commit -m "Resolved merge conflicts from DAAF update"` |
+| "rebase conflicts" | User chose rebase; the squashed local commit conflicts with upstream | `git rebase --continue` |
+| "stash conflicts" | The merge/rebase succeeded, but the user's uncommitted edits (temporarily set aside) conflict with the updated files when re-applied | `git stash drop` (the stash contents are already in the working tree) |
+
+### What the orchestrator must do
+
+**1. Classify as User Support mode** — the "User support mode" prefix is an
+explicit mode signal. Skip the mode confirmation gate — the user already
+confirmed by choosing option 1 in the update script.
+
+**2. Determine the conflict type** — check the user's prompt for "merge",
+"rebase", or "stash". Then identify the conflicting files:
+`git diff --name-only --diff-filter=U`. Read each one to understand both sides.
+
+**3. Walk the user through resolution interactively** — for each file:
+- Explain what the local side is (the user's customization) and what the
+  upstream side is (the DAAF update)
+- Recommend which version to keep, or how to merge both intelligently
+- **Do not resolve or edit any file without the user's explicit approval.** Present the
+  proposed resolutions file-by-file and wait for confirmation for each individual case before making changes.
+- After the user approves a given resolution, edit the file to remove all conflict
+  markers (`<<<<<<<`, `=======`, `>>>>>>>`) and run `git add <file>`
+- **Watch for escalation signals** — see "Escalation to Framework Development"
+  below. If you detect them, flag the situation before continuing with
+  mechanical resolution.
+
+**4. Complete the git operation** — after all files are resolved, run the
+completion command from the table above based on the conflict type. Verify with
+`git status` that the working tree is clean (no unmerged files, no in-progress
+merge/rebase).
+
+**5. Instruct the user to return to the updater** — the update script is still
+running on the host. When the user types `/exit`, control returns to the script,
+which then syncs updated utility scripts to the host and checks whether a Docker
+rebuild is needed. If the user closes the terminal instead, those housekeeping
+steps are skipped. Tell the user:
+
+> "Great, all conflicts are resolved and committed. Type `/exit` now to return to the
+> update script so it can finish up."
+
+### Escalation to Framework Development
+
+Sometimes update conflicts are symptoms of a deeper integration problem. Resolving
+the conflict markers gets the git state clean, but the user's customization may
+not actually *work* with the updated framework. Watch for these signals during
+step 3:
+
+**Escalation signals:**
+
+| Signal | What It Suggests |
+|--------|-----------------|
+| Conflicts in an agent, mode, or skill file where the upstream side restructured sections, renamed fields, or changed the template format | The customization needs architectural re-integration, not just a merge fix |
+| User's custom component references registration points (tables, escalation paths, loading trees) that moved or changed structure upstream | Cross-file wiring is broken — resolving one file won't fix the integration |
+| Multiple interconnected files conflict (e.g., a custom mode's reference file + its entries in the orchestrator skill + BOUNDARIES.md) | The customization is a multi-component modification that needs systematic re-integration |
+| After resolving conflict markers, the merged result contains contradictions (e.g., a section references a field that no longer exists, or a table row doesn't match the new column structure) | Mechanical merge produced a syntactically clean but semantically broken artifact |
+| User asks "how do I make my customization work with this new version?" or "will my changes still work?" | The user recognizes the problem goes beyond conflict markers |
+
+**When signals are detected:**
+
+1. **Finish the git operation first.** The update script is waiting, so the
+   working tree must reach a clean state. Resolve conflict markers to the best
+   reasonable approximation (favor upstream for structural changes, preserve the
+   user's *intent* in comments if needed). Complete the merge/rebase/stash-drop.
+2. **Tell the user what you observed.** Be specific about which files have
+   deeper integration issues and why mechanical resolution isn't sufficient.
+3. **Propose the escalation:**
+
+> "The conflicts are resolved and your git state is clean, so you're safe to
+> `/exit` and let the update script finish. But I noticed that your
+> [customization description] may need more than a merge fix to work with the
+> updated framework — [brief explanation of what changed upstream]. After the
+> update finishes, you can start a new session and ask me to help with that in
+> Framework Development mode. I'd scope what changed, check how your
+> customization connects, and re-integrate it properly."
+
+4. **Do not attempt Framework Development work in this session.** The update
+   script is still running on the host and waiting for `/exit`. Framework
+   Development requires a normal session with full scoping and checkpoints.
+   The user should `/exit` to complete the update, then start a new session.
+
+---
+
+## Subagent Invocation
+
+User Support mode does **not** dispatch subagents under normal operation. The orchestrator handles all questions directly using pre-loaded documentation and on-demand reference reads.
+
+**Exception:** If a user's question requires investigation that would be better served by a read-only research agent (e.g., "Can you check if there's a skill for X?" or "What does the research-executor agent actually do in detail?"), the orchestrator may dispatch a single `search-agent` subagent for targeted lookup. This should be rare -- most questions are answerable from the reference index above.
+
+---
+
+## Output Format
+
+User Support produces no formal deliverables. All output is conversational.
+
+| Question Type | Response Style |
+|---------------|---------------|
+| Conceptual ("What is DAAF?", "How do modes work?") | Educational explanation with examples, referencing relevant documentation |
+| Procedural ("How do I start an analysis?", "How do I resume?") | Step-by-step guidance with specific actions the user can take |
+| Troubleshooting ("Something's not working", "I got an error") | Diagnostic questions, then targeted guidance from FAQ or installation docs |
+| Capability ("Can DAAF do X?", "What data sources are available?") | Direct answer with pointers to relevant modes or skills |
+| Architecture ("How do agents work?", "What are skills?") | Accessible explanation of internals, referencing framework files the user can read |
+| Best practices ("How do I write good prompts?", "Tips for reviewing?") | Practical guidance drawn from best practices documentation |
+| Mode routing ("I want to do X but I'm not sure which mode") | Explain relevant modes, recommend the best fit, offer to switch |
+
+**Tone:** Warm, patient, and educational. Assume the user may be new to DAAF, to OMP, or to AI-assisted research. Explain concepts without condescension. Use concrete examples. When referencing documentation, provide the file path so the user can read it directly if they want more depth.
+
+**Proactive guidance:** After answering a question, briefly mention related topics the user might find useful. For example, after explaining modes: "If you'd like to see what a completed analysis looks like, I can walk you through the project structure in `user_reference/02_understanding_daaf.md`."
+
+---
+
+## LEARNINGS.md Behavior
+
+User Support mode does **not** create LEARNINGS.md. This mode produces no analytical artifacts and generates no reusable research insights. If the session surfaces framework improvement ideas, the user can note them for a future Framework Development session.
+
+---
+
+## Boundaries
+
+These boundaries supplement the universal safety boundaries in `AGENTS.md`. See also `agent_reference/BOUNDARIES.md` > User Support Mode.
+
+### Always Do
+
+- Read the four core documents on mode entry before responding to any question
+- Respond in plain, educational language -- no internal jargon unless the user uses it first
+- Provide file paths when referencing documentation so the user can read directly
+- Suggest the appropriate mode when the user's question reveals they want to *do* something, not just learn about something
+- Be honest about DAAF's limitations and appropriate use cases
+
+### Ask First Before
+
+- Dispatching any subagent (should be rare in this mode)
+- Switching to another mode -- always propose and wait for confirmation
+- Reading framework internals files that might contain sensitive configuration details
+
+### Never Do
+
+- Execute code or create scripts
+- Create workspaces, STATE.md, SESSION_NOTES.md, or any project artifacts
+- Load domain skills (data source skills, methodology skills, tool skills) -- these are for analysis modes
+- Dispatch coding agents (research-executor, debugger, code-reviewer, data-ingest)
+- Produce formal deliverables (plans, reports, notebooks)
+- Assume the user is an expert -- default to accessible explanations unless signaled otherwise
+
+---
+
+## Escalation Triggers
+
+User Support is a natural entry point that routes to other modes once the user understands what they want. All escalations require explicit user confirmation.
+
+| Condition | Target Mode | Action |
+|-----------|-------------|--------|
+| User wants to look up a specific data variable or definition | Data Lookup | "That's a specific data question -- want me to switch to Data Lookup mode? I can get you a direct answer." |
+| User wants to explore what data is available for a topic | Data Discovery | "Sounds like you want to explore what's possible. Want me to switch to Data Discovery mode?" |
+| User wants to run an analysis or produce a deliverable | Full Pipeline | "That's a full analysis request. Want me to switch to Full Pipeline mode? I'll walk you through the whole process." |
+| User wants hands-on help with code, debugging, or a specific task | Ad Hoc Collaboration | "That sounds like hands-on work. Want me to switch to Ad Hoc Collaboration mode?" |
+| User wants to add or profile a new dataset | Data Onboarding | "I can profile that data for you. Want me to switch to Data Onboarding mode?" |
+| User wants to modify an existing analysis | Revision and Extension | "That's a revision of existing work. Want me to switch to Revision and Extension mode?" |
+| User wants to verify an analysis reproduces | Reproducibility Verification | "I can re-run that analysis to check. Want me to switch to Reproducibility Verification mode?" |
+| User wants to modify DAAF itself | Framework Development | "That's framework development work. Want me to switch to Framework Development mode?" |
+| Update conflict resolution reveals customizations that need architectural re-integration beyond merge fixes | Framework Development | Follow the "Escalation to Framework Development" procedure above. User-facing message: "The conflicts are resolved, but your [customization] may need deeper re-integration with the updated framework. After you `/exit` and the update finishes, start a new session and ask me to help in Framework Development mode." |
+
+**Routing, not gatekeeping:** The goal of User Support is to help users understand DAAF well enough to use it confidently. When a user's questions naturally evolve into wanting to *do* something, facilitate the transition warmly. Never make the user feel like they need to "graduate" from User Support before they can use other modes.

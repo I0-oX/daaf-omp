@@ -1,0 +1,23 @@
+# Node/Bun dependencies
+node_modules/
+bun.lock
+
+# OMP session/runtime files
+.omp/logs/
+.omp/plugins/
+omp-plugins.lock.json
+
+# Local artifacts/logs/temporary files
+.claude/
+.env
+.env.*
+*.log
+.DS_Store
+__pycache__/
+*.pyc
+
+# Local runtime logs/analysis artifacts generated during execution
+data/
+outputs/
+reports/
+tests/

@@ -1,0 +1,41 @@
+{
+  "name": "daaf-omp",
+  "version": "1.0.0",
+  "description": "Data Analyst Augmentation Framework (DAAF) integration for Oh My Pi (OMP)",
+  "type": "module",
+  "main": "./.omp/extensions/daaf-statusline.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DAAF-Contribution-Community/daaf-omp.git"
+  },
+  "keywords": [
+    "omp",
+    "oh-my-pi",
+    "daaf",
+    "data-analysis",
+    "agentic"
+  ],
+  "author": "DAAF Contribution Community",
+  "license": "LGPL-3.0-or-later",
+  "omp": {
+    "name": "daaf-omp",
+    "version": "1.0.0",
+    "description": "DAAF cost-control, safety rules, and statusline extensions for OMP",
+    "extensions": [
+      "./.omp/extensions/daaf-bash-safety.ts",
+      "./.omp/extensions/daaf-enforce-single-command.ts",
+      "./.omp/extensions/daaf-enforce-file-first.ts",
+      "./.omp/extensions/daaf-enforce-model-ceiling.ts",
+      "./.omp/extensions/daaf-audit-log.ts",
+      "./.omp/extensions/daaf-output-scanner.ts",
+      "./.omp/extensions/daaf-context-reporter.ts",
+      "./.omp/extensions/daaf-remind-orchestrator.ts",
+      "./.omp/extensions/daaf-archive-session.ts",
+      "./.omp/extensions/daaf-recover-session-logs.ts",
+      "./.omp/extensions/daaf-flag-orchestrator-loaded.ts",
+      "./.omp/extensions/daaf-deny-claude-code-guide.ts",
+      "./.omp/extensions/daaf-enforce-explore-model.ts",
+      "./.omp/extensions/daaf-statusline.ts"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+# DAAF project configuration for OMP (Oh My Pi)
+# Ported from .claude/settings.json
+
+# Model defaults — OMP uses --model or config to select the model.
+# The daaf-enforce-model-ceiling extension preserves cost-control choice.
+
+# Extensions to load — the DAAF safety, audit, and orchestration extensions.
+# These are TS modules in .omp/extensions/ that implement OMP extension API.
+extensions:
+  - ./.omp/extensions/daaf-bash-safety.ts
+  - ./.omp/extensions/daaf-enforce-single-command.ts
+  - ./.omp/extensions/daaf-enforce-file-first.ts
+  - ./.omp/extensions/daaf-enforce-model-ceiling.ts
+  - ./.omp/extensions/daaf-audit-log.ts
+  - ./.omp/extensions/daaf-output-scanner.ts
+  - ./.omp/extensions/daaf-context-reporter.ts
+  - ./.omp/extensions/daaf-remind-orchestrator.ts
+  - ./.omp/extensions/daaf-archive-session.ts
+  - ./.omp/extensions/daaf-recover-session-logs.ts
+  - ./.omp/extensions/daaf-flag-orchestrator-loaded.ts
+  - ./.omp/extensions/daaf-deny-claude-code-guide.ts
+  - ./.omp/extensions/daaf-enforce-explore-model.ts
+  - ./.omp/extensions/daaf-statusline.ts
+
+# Skills are auto-discovered from .omp/skills/*/SKILL.md
+# No explicit config needed — 36 skills discovered automatically.
+
+# Environment variables for DAAF operation
+# (OMP passes env to tool execution; these are framework-level hints)
