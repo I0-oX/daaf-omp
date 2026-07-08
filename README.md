@@ -85,12 +85,30 @@ Model mapping: DAAF `opus` tier → `pi/slow` (most capable), DAAF `sonnet` tier
 
 ## Usage
 
+### Option A: Standalone Project (Template Mode)
+If you want to run DAAF directly inside this repository:
 ```bash
 # From this directory, launch OMP
 omp
+```
+The 14 extensions load automatically, 36 skills are discovered, and `.omp/AGENTS.md` provides the DAAF context.
 
-# The 14 extensions load automatically, 36 skills are discovered,
-# and AGENTS.md provides the DAAF context.
+### Option B: Install as an OMP Plugin (Global/Project Mode)
+To use DAAF extensions and safety hooks in an existing OMP project, install it as a plugin:
+```bash
+# Install via Git (GitHub)
+omp plugin install github:DAAF-Contribution-Community/daaf-omp
+
+# Or link a local clone
+omp plugin link /path/to/daaf-omp
+```
+
+This registers and loads all 14 TS extensions and shell hooks. To fully utilize the DAAF agents and skills, you should copy the respective `.omp/agents/`, `.omp/skills/`, and `.omp/AGENTS.md` files into your project's `.omp/` folder.
+
+You can automate this configuration copy by running the local setup utility:
+```bash
+# Run from the plugin directory to copy assets to your target project CWD
+./setup.sh
 ```
 
 ## Verification
