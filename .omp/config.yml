@@ -1,5 +1,8 @@
 # DAAF project configuration for OMP (Oh My Pi)
 # Ported from .claude/settings.json
+# This port diverges from the original DAAF (DAAF-Contribution-Community/daaf).
+# Hooks and extensions omitted here were Claude Code‑specific and have no
+# equivalent in the OMP harness (model‑ceiling, permissions, etc.).
 
 # DAAF safety, audit, and orchestration extensions.
 # These are TS modules in .omp/extensions/ that implement OMP extension API.
