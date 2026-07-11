@@ -41,13 +41,13 @@ Findings Synthesis
 
 > **Wave barrier discipline (async dispatch).** These subagents run in the background by default and return via completion notifications that may arrive one at a time. Treat mid-wave notifications as status-only: do not begin the Multi-Source Synthesis Protocol below, present findings, or propose escalation until EVERY dispatched source subagent has returned. Synthesize once, over the complete set of returns — a source that returns early or fails still counts as a completion to fold into that single synthesis, not as a trigger to start summarizing before the rest arrive. See the master statement in `SKILL.md` § Subagent Coordination > "Wave Barrier Discipline (Async Dispatch)."
 
-**Before dispatching subagents:** Read `{BASE_DIR}/agent_reference/WORKFLOW_PHASE1_DISCOVERY.md` for the detailed invocation templates (Stage 2: Domain Explorer, Stage 3: Source Deep-Dive). These templates specify the exact prompt structure, context fields, thoroughness directives, and output formats for each subagent type.
+**Before dispatching subagents:** Read `{BASE_DIR}/agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for the detailed invocation templates (Stage 2: Domain Explorer, Stage 3: Source Deep-Dive). These templates specify the exact prompt structure, context fields, thoroughness directives, and output formats for each subagent type.
 
 **Note:** Data Discovery mode does NOT require loading `agent_reference/BOUNDARIES.md`, or `full-pipeline-mode.md`. These contain execution-stage guidance (QA substages, code review patterns, git commit protocol) that is irrelevant to Data Discovery's read-only exploration.
 
 ## Subagent Invocation
 
-Data Discovery uses read-only subagents to explore data availability. Follow the invocation templates in `{BASE_DIR}/agent_reference/WORKFLOW_PHASE1_DISCOVERY.md`, with these specifics:
+Data Discovery uses read-only subagents to explore data availability. Follow the invocation templates in `{BASE_DIR}/agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md`, with these specifics:
 
 - **Stage 2:** Subagent invokes the domain explorer skill (e.g., `education-data-explorer` for education domain)
 - **Stage 3:** Subagent invokes domain source skill(s) (e.g., `education-data-source-ccd`) for deep dives on specific sources flagged in Stage 2

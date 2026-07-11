@@ -90,7 +90,7 @@ The canonical wrapper lives at the **repo root**: `{BASE_DIR}/scripts/run_with_c
 
 All scripts reference this single canonical copy directly — there is no need to copy it into individual project directories. This avoids drift and ensures every project uses the same version.
 
-**Executable permission required:** `run_with_capture.sh` must have its executable bit set both on the filesystem (`chmod +x`) and in Git's index (`git update-index --chmod=+x`). The file's mode in `git ls-files -s` must be `100755`. Without this, `./run_with_capture.sh` invocations will fail, and clones of the repository will receive a non-executable copy. The same requirement applies to `collect_session_logs.sh` and any other `.sh` utility in `scripts/`.
+**Executable permission required:** `run_with_capture.sh` must have its executable bit set both on the filesystem (`chmod +x`) and in Git's index (`git update-index --chmod=+x`). The file's mode in `git ls-files -s` must be `100755`. Without this, `./run_with_capture.sh` invocations will fail, and clones of the repository will receive a non-executable copy. The same requirement applies to OMP session archiving and any other `.sh` utility in `scripts/`.
 
 ### What It Does
 
@@ -253,7 +253,7 @@ research/YYYY-MM-DD_[Title]/
 
 Profiling scripts use the same file-first execution pattern, IAT documentation standards, and `run_with_capture.sh` wrapper. See `.omp/skills/daaf-orchestrator/references/data-onboarding-mode.md` for the profiling script template and part-specific details.
 
-**Everything stays inside the project.** All script outputs, intermediates, and scratch files are written under the project directory — never `/tmp`, which is outside the backup and audit boundary and is blocked by the `bash-safety.sh` extension and `config.yml` deny rules. Temporary/intermediate working files go in `{PROJECT_DIR}/scripts/scratch/` (created on first use); see AGENTS.md § Project Conventions > Scratch Files. (Reading DAAF's own `/tmp` coordination caches, e.g. `/tmp/claude-model-*`, is permitted — only writes to `/tmp` are blocked.)
+**Everything stays inside the project.** All script outputs, intermediates, and scratch files are written under the project directory — never `/tmp`, which is outside the backup and audit boundary and is blocked by OMP's bash tool safety guardrails. Temporary/intermediate working files go in `{PROJECT_DIR}/scripts/scratch/` (created on first use); see AGENTS.md § Project Conventions > Scratch Files. (Reading DAAF's own `/tmp` coordination caches, e.g. `OMP model cache`, is permitted — only writes to `/tmp` are blocked.)
 
 ---
 

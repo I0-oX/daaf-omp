@@ -51,7 +51,11 @@ The `model:` field is **expected on every DAAF agent** — it sets the model tie
 
 **`inherit` is reserved** for the rare agent that must deliberately track the session model rather than pin a tier.
 
-The frontmatter tier is a *default floor*, not a cap: the orchestrator may override any dispatch via the task tool's per-dispatch `model` parameter (which outranks frontmatter), and a session-model ceiling is enforced by the `enforce-model-ceiling.sh` extension. For the full per-agent routing table, escalation/downgrade rules, and the ceiling rule, see `.omp/skills/daaf-orchestrator/SKILL.md` > "Model Selection for Subagent Dispatch".
+The frontmatter tier is a *default floor*, not a cap: the orchestrator may override any dispatch via the task tool's per-dispatch `model` parameter (which outranks frontmatter), and a session-model ceiling is enforced by the OMP extension. For the full per-agent routing table, escalation/downgrade rules, and the ceiling rule, see `.omp/skills/daaf-orchestrator/SKILL.md` > "Model Selection for Subagent Dispatch".
+
+#### Dispatch Mode
+
+DAAF dispatches agents via OMP's `task` tool batch mode — **workflowz**. Batches carry a shared `context` across parallel agents in a wave, and the concurrency semaphore limits parallel dispatches to 5. See `.omp/skills/daaf-orchestrator/SKILL.md` > "OMP Tool Integration (workflowz)" for the canonical dispatch contract.
 
 ### Section 1: Title and Purpose (REQUIRED)
 
@@ -60,13 +64,13 @@ The frontmatter tier is a *default floor*, not a cap: the orchestrator may overr
 
 **Purpose:** [One sentence — what this agent does and why it exists in the system.]
 
-**Invocation:** Via task tool with `subagent_type: "[agent-name]"`
+**Invocation:** Via task tool with `agent: "[agent-name]"`
 ```
 
 **Guidelines:**
 - Title uses `# ` H1 with agent name + "Agent" suffix
 - Purpose is a single sentence, not a paragraph
-- Invocation states the subagent_type used by the orchestrator
+- Invocation states the agent used by the orchestrator
 
 ---
 
@@ -409,13 +413,13 @@ Before returning output, verify:
 ```markdown
 ## Invocation
 
-**Invocation type:** `subagent_type: "[agent-name]"`
+**Invocation type:** `agent: "[agent-name]"`
 
 The stage-specific invocation template with full context fields is in the relevant `agent_reference/WORKFLOW_PHASE[N]_[NAME].md` or mode reference file (paths relative to the project root).
 ```
 
 **Guidelines:**
-- Specifies the `subagent_type` for quick reference
+- Specifies the `agent` for quick reference
 - References the relevant WORKFLOW_PHASE file or mode reference file for stage-specific context fields and invocation templates
 - The invocation template must map to Upstream Inputs (Section 3)
 - Do NOT duplicate the full task() call syntax here — that lives in the WORKFLOW_PHASE or mode reference files

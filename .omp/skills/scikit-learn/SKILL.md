@@ -201,7 +201,7 @@ What kind of interpretation?
 Closely read `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for the mandatory file-first execution protocol covering complete code file writing, output capture, and file versioning rules. All ML scripts must follow the Inline Audit Trail (IAT) standard -- see `agent_reference/INLINE_AUDIT_TRAIL.md`. For ML code, document model selection rationale (why this algorithm, why these hyperparameters, what assumptions) with `# INTENT:`, `# REASONING:`, and `# ASSUMES:` comments.
 
 **See:**
-- `agent_reference/WORKFLOW_PHASE4_ANALYSIS.md` -- Stage 8 (Analysis & Visualization)
+- `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` -- Stage 8 (Analysis & Visualization)
 - `agent_reference/INLINE_AUDIT_TRAIL.md` -- IAT documentation standard
 
 The examples below show scikit-learn syntax. In research workflows, wrap them in scripts following the file-first pattern.

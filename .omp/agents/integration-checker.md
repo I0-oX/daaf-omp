@@ -12,7 +12,7 @@ tools: read,glob,grep,yield
 
 **Purpose:** Validate that analysis components are properly connected — data flows through the pipeline, outputs reference correct inputs, and the complete system works end-to-end.
 
-**Invocation:** Via agent tool with `agent: "integration-checker"`
+**Invocation:** Via task tool with `agent: "integration-checker"`
 
 ---
 
@@ -543,7 +543,7 @@ Before returning output, verify:
 
 **Invocation type:** `agent: "integration-checker"`
 
-See `agent_reference/WORKFLOW_PHASE5_SYNTHESIS.md` for the stage-specific invocation template.
+See `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for the stage-specific invocation template.
 The integration checker is invoked at multiple pipeline stages; see the corresponding `agent_reference/WORKFLOW_PHASE*.md` files.
 
 ---

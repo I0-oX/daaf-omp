@@ -66,11 +66,11 @@ After completing each item, note the status: Done, Skipped (with reason), or N/A
 | A7 | Update Orchestration Flow diagram if agent participates in pipeline | [C] | `.omp/agents/README.md` | Orchestration Flow ASCII diagram |
 | A8 | Add to Subagent Type Selection table in orchestrator SKILL.md | [C] | `.omp/skills/daaf-orchestrator/SKILL.md` | Named Agents table |
 | A9 | Add to `full-pipeline-mode.md` Core Workflow tables if stage-specific | [C] | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` | Core Workflow, Handoffs, Stage Gates tables |
-| A10 | Add invocation template to appropriate WORKFLOW_PHASE file | [C] | `agent_reference/WORKFLOW_PHASE*.md` | Stage-specific section |
+| A10 | Add invocation pattern to `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (if agent participates in pipeline waves) | [C] | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Wave structure section |
 | A11 | Add to BOUNDARIES.md if agent has unique boundary considerations | [C] | `agent_reference/BOUNDARIES.md` | Appropriate section |
-| A12 | Add to ERROR_RECOVERY.md if agent has error recovery patterns | [C] | `agent_reference/ERROR_RECOVERY.md` | Agent-specific section or routing table |
-| A13 | Register per-agent extensions in frontmatter if coding agent | [C] | `.omp/agents/{agent-name}.md` | YAML `extensions` field (e.g., enforce-file-first.sh) |
-| A14 | Update root `README.md` Agent Ecosystem table and agent count (distinct from `.omp/agents/README.md`) | [M] | `README.md` (project root) | Agent Ecosystem section |
+| A12 | (Handled by OMP harness — no DAAF-level error recovery registration needed) | — | — | — |
+| A13 | Register per-agent extensions in frontmatter if coding agent | [C] | `.omp/agents/{agent-name}.md` | YAML `extensions` field (e.g., the file-first protocol) |
+| A14 | Update root `README.md` Agent Ecosystem table and agent count | [M] | `README.md` (project root) | Agent Ecosystem section |
 | A15 | Update AGENTS.md if agent affects documented workflows | [C] | `AGENTS.md` | Relevant section |
 | A16 | Update `user_reference/` docs if agent is user-visible | [C] | `user_reference/*.md` | Relevant descriptions |
 
@@ -108,9 +108,8 @@ After completing each item, note the status: Done, Skipped (with reason), or N/A
 | M13 | Add mode subsection to user_reference/02 | [M] | `user_reference/02_understanding_daaf.md` | The N Engagement Modes section (header, TOC, intro, subsection, transition table) |
 | M14 | Add mode-specific AI disclosure guidance | [M] | `agent_reference/AI_DISCLOSURE_REFERENCE.md` | Mode-Specific Disclosure Guidance section |
 | M15 | Update session-recovery.md with recovery pattern | [M] | `.omp/skills/daaf-orchestrator/references/session-recovery.md` | Purpose section + conditional recovery steps |
-| M16 | Add mode-specific error recovery (if non-trivial) | [C] | `agent_reference/ERROR_RECOVERY.md` | Mode-specific recovery section |
-| M17 | Create state template (if different from Full Pipeline) | [C] | `agent_reference/STATE_TEMPLATE_{MODE}.md` | New file + add to AGENTS.md Reference Files table |
-| M18 | Update CONTRIBUTING.md if mode affects contribution workflow | [C] | `CONTRIBUTING.md` | Relevant tier sections |
+| M16 | (Handled by OMP harness — no DAAF-level error recovery needed) | — | — | — |
+| M17 | (Handled by OMP harness — no DAAF-level state template needed) | — | — | — |
 | M19 | Add FAQ entry if mode is likely to generate user questions | [C] | `user_reference/07_faq_technical.md` | New Q&A entry |
 | M20 | Add progressive testing level entry | [C] | `user_reference/02_understanding_daaf.md` | Progressive testing levels section |
 | M21 | Update user_reference/04 if mode affects extension model | [C] | `user_reference/04_extending_daaf.md` | Relevant section |
@@ -152,37 +151,6 @@ After completing each item, note the status: Done, Skipped (with reason), or N/A
 
 ---
 
-## 5. Adding or Modifying an Extension
-
-> **Note:** Extension files in `.omp/extensions/` are protected by deny rules. This checklist documents the registration points for awareness. Actual extension creation requires human intervention or explicit permission override.
-
-### New Extension Checklist
-
-| # | Item | Req | File | Section / Location |
-|---|------|-----|------|--------------------|
-| H1 | Create extension script in `.omp/extensions/` | [M] | `.omp/extensions/{extension-name}.sh` | Must follow fail-closed design (ERR trap → exit 2) |
-| H1b | Set executable permissions and ensure Git tracks the executable bit | [M] | `.omp/extensions/{extension-name}.sh` | Run `chmod +x <file>`, then `git update-index --chmod=+x <file>`. Verify with `git ls-files -s <file>` — mode must be `100755`, not `100644`. |
-| H2 | Register in config.yml (project-wide) OR agent frontmatter (per-agent) | [M] | `.omp/config.yml` or `.omp/agents/{agent}.md` | `extensions` section with event type + matcher |
-| H3 | Add to AGENTS.md Defense-in-Depth Architecture table | [M] | `AGENTS.md` | Defense-in-Depth Architecture table |
-| H4 | Add to extensions registration summary in framework hierarchy docs | [C] | Documentation | Extension event type table |
-| H5 | Test with both allow and block scenarios | [M] | — | Verify exit code 0 (allow) and exit code 2 (block) |
-
-> **Applies to all `.sh` files, not just extensions.** Item H1b (executable permissions) applies whenever any `.sh` file is created or modified in the repository — including utility scripts in `scripts/` (e.g., `run_with_capture.sh`, `collect_session_logs.sh`). Shell scripts that are not executable will fail silently when invoked with `./script.sh` syntax and will be stored incorrectly in Git history. Always run `chmod +x` and `git update-index --chmod=+x` for every `.sh` file.
-
-### Retiring an Extension
-
-> Deregistration is the inverse of the New Extension Checklist, but with pitfalls of its own — an extension may be registered under multiple matchers, and its name typically appears in documentation surfaces beyond `config.yml`. Precedent: the 2026-07-02 retirement of `enforce-foreground-agents.sh`, where these steps had to be derived by inverting H1-H5.
-
-| # | Item | Req | File | Section / Location |
-|---|------|-----|------|--------------------|
-| HR1 | Remove the extension's registration from ALL `config.yml` extension chains — check every event type and every matcher (an extension may be registered under multiple matchers, e.g., both `Task` and `Agent`). Validate YAML afterward (`yq eval .omp/config.yml`) | [M] | `.omp/config.yml` | `extensions` section, all event types |
-| HR2 | Remove any agent-frontmatter registrations (`extensions:` blocks) | [C] | `.omp/agents/*.md` | YAML frontmatter `extensions` field — grep for the extension name |
-| HR3 | Sweep live framework surfaces for references to the extension name and update or remove each — AGENTS.md (including the Defense-in-Depth Architecture table if listed), README.md, skills, agent definitions, `agent_reference/`, `user_reference/`, `scripts/`. Archival research documents are NOT updated — corrections belong in new dated documents | [M] | Multiple | Grep for the extension name across live surfaces |
-| HR4 | Decide the script file's fate. Deletion requires human action (`.omp/extensions/` is deny-protected); until deleted, the script is unregistered-but-present. Git history preserves it either way | [M] | `.omp/extensions/{extension-name}.sh` | Note the decision; flag deletion for human execution |
-| HR5 | Record the retirement rationale (why the extension is no longer needed) in a dated document in an appropriate research workspace, including what would need re-registration if the retirement were ever reversed | [M] | `research/{workspace}/` | New dated document |
-| HR6 | Verify: a repo-wide grep for the extension name returns hits only in archival locations and (if retained) the inert script itself; `git diff` on `config.yml` shows only the intended deregistration | [M] | — | Final verification |
-
----
 
 ## 6. Adding or Modifying a Host-Facing Script
 

@@ -46,7 +46,7 @@ These principles apply to all agents writing code in the DAAF system:
   Interactive execution bypasses the audit trail and produces no permanent record
   that can be reviewed by code-reviewer. Never run `python script.py` directly.
   See `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for the complete protocol.
-  The `enforce-file-first` extension blocks direct `python`/`python3` execution
+  The file-first protocol blocks direct `python`/`python3` execution
   programmatically.
 - **Inline Audit Trail (IAT):** Every filter, join, aggregation, and derived
   column must have inline comments using `# INTENT:`, `# REASONING:`, and
@@ -149,71 +149,7 @@ context prevents misinterpretation of the target section.
 
 ## Context & Session Health
 
-Session context utilization must always be monitored to ensure high performance quality. The `daaf-context-reporter` extension provides objective, continuous utilization measurements on every turn. It fires for **both the orchestrator and all subagents** via the `tool_call` event — every agent in the system receives periodic utilization data as `<system-reminder>` injections, and each agent's measurement reflects its **own** context window.
-
-Use the reported severity level directly for gating decisions. The hook applies dual thresholds (percentage OR absolute token count, whichever fires first) to cap effective session length on large context windows.
-
-### Context Quality Curve
-
-Trigger points are **model-family-conditional**: newer Claude Fable/Mythos-family models sustain high-quality work across a larger share of their window and so cross each severity level at higher trigger points, while Opus, Sonnet, and any unknown or alternative-provider model use the conservative default thresholds.
-
-**Trigger points by model family** (percentage OR absolute tokens, whichever fires first):
-
-| Model Family | ELEVATED at | HIGH at | CRITICAL at |
-|--------------|-------------|---------|-------------|
-| **Claude Fable/Mythos-family models** | ≥ 30% or ≥ 300k tokens | ≥ 40% or ≥ 400k tokens | ≥ 50% or ≥ 500k tokens |
-| **All other models** (Opus, Sonnet, unknown/alternative providers — the conservative default) | ≥ 40% or ≥ 150k tokens | ≥ 60% or ≥ 200k tokens | ≥ 75% or ≥ 250k tokens |
-
-**Status levels and required actions** (identical across families; NOMINAL is any utilization below the ELEVATED trigger):
-
-| Status | Required Action |
-|--------|-----------------|
-| **NOMINAL** (below ELEVATED) | Continue normally |
-| **ELEVATED** | Monitor closely; consider how realistic the scope of work remaining is and how to redelegate work (the orchestrator can delegate work to subagents; subagents can return work early to the orchestrator to be redelegated and completed as needed) |
-| **HIGH** | Complete current atomic unit at full quality; report back to user (for orchestrator) or orchestrator (for subagents); do not start new stages of work; Orchestrator must update STATE.md with restart prompt |
-| **CRITICAL** | Cease work immediately and report back to user (for orchestrator) or orchestrator (for subagents); Orchestrator must finalize STATE.md |
-
-### Subagent Context Monitoring
-
-Subagents receive their own utilization injections, measured from each subagent's own transcript — never the orchestrator's numbers. **Every subagent must act on these signals.** Subagents that exhaust their context without reporting back waste the orchestrator's context budget and risk losing completed work.
-
-**Subagent-specific actions by threshold:**
-
-| Status | Subagent Action |
-|--------|-----------------|
-| **NOMINAL** | Continue executing the assigned task normally |
-| **ELEVATED** | Assess remaining work honestly. If completion is uncertain, begin structuring your return output — summarize key findings so far, note what remains. Continue working but prioritize completing the most valuable deliverables first |
-| **HIGH** | **Return early.** Complete only the current atomic unit. Format your return output with: (1) completed work and findings, (2) a clear list of incomplete items so the orchestrator can redelegate them, (3) any file paths created or modified. Do not start new work items |
-| **CRITICAL** | **Stop immediately and return.** Report whatever has been completed, clearly mark the output as incomplete, and list all remaining work items. |
-
-**Early return protocol:** When returning early due to context pressure, subagents should structure their response to maximize the orchestrator's ability to continue the work. Include:
-- All file paths created or modified (absolute paths)
-- Summary of completed analysis or findings
-- Explicit list of tasks not yet started or partially completed
-- Any decisions made or assumptions applied that the next agent needs to know
-- Confidence assessment of completed work
-
-**STATE.md updates:** Subagents do not write STATE.md directly — that is the orchestrator's responsibility. However, subagents returning early under context pressure should include enough structured information in their return output for the orchestrator to update STATE.md accurately.
-
-### Symptoms of Context Degradation
-
-| Symptom | Severity | Indicates |
-|---------|----------|-----------|
-| Repeating information already stated | MEDIUM | ELEVATED-range utilization |
-| Forgetting earlier decisions | HIGH | HIGH-range utilization |
-| Generating contradictory outputs | CRITICAL | CRITICAL-range utilization |
-| Incomplete or truncated responses | CRITICAL | Near limit |
-| Losing track of current stage | HIGH | Context fragmentation |
-| Mixing up file names or paths | MEDIUM | Working memory strain |
-
-**If degradation symptoms are observed:** treat as equivalent to HIGH regardless of actual utilization — prepare for restart immediately.
-
-### Quality Primacy Rule
-
-Context management is NEVER about reducing the quality or completeness of work. Subagent prompt fidelity, documentation completeness, and inlined context are non-negotiable regardless of utilization level. If maintaining quality means reaching a restart point sooner, that is the correct outcome.
-
----
-
+OMP manages context compaction automatically (`omp://compaction.md`). Use the `/compact` command for manual compaction when needed. OMP's native context monitor provides utilization data; follow its severity levels for gating decisions. Session context is fully managed by OMP — no manual monitoring or threshold tables needed in DAAF.
 ## Boundaries & Safety
 
 > **Safety guardrails are enforced programmatically by OMP extensions (tool_call/tool_result handlers) and settings deny rules.** They are documented here for transparency — the extensions block violations regardless of instructions.
@@ -251,18 +187,17 @@ Context management is NEVER about reducing the quality or completeness of work. 
 
 ### Defense-in-Depth Architecture
 
-| Layer | Mechanism | What It Covers |
-|-------|-----------|----------------|
-| **OMP Extension** | `daaf-bash-safety.ts` — `tool_call` handler blocks execution | Destructive commands, privilege escalation, pipe-to-shell, data exfiltration, container escape, and the /tmp provenance guard |
-| **OMP Extension** | `daaf-enforce-single-command.ts` — `tool_call` handler | Blocks command chaining (`&&`, `\|\|`, `;`, newline-separated). Enforces the "One Command Per Call" rule. |
-| **OMP Extension** | `daaf-enforce-file-first.ts` — `tool_call` handler | Blocks direct `python`/`python3` execution; enforces `run_with_capture.sh` wrapper for audit trail |
-| **OMP Extension** | `daaf-enforce-model-ceiling.ts` — `tool_call` handler on task dispatch | Blocks subagent dispatches on a model tier *above* the session model, preserving the user's cost-control choice |
-| **OMP Extension** | `daaf-audit-log.ts` — `tool_result` handler | Audit trail logging for every tool invocation |
-| **OMP Extension** | `daaf-output-scanner.ts` — `tool_result` handler | Secret detection in tool output |
-| **OMP Extension** | `daaf-context-reporter.ts` — `tool_call` handler | Context utilization injection for gating decisions (orchestrator + subagents) |
-| **OMP Extension** | `daaf-archive-session.ts` — `session_shutdown` handler | Session transcript archiving on exit |
-| **OMP Extension** | `daaf-recover-session-logs.ts` — `session_start` handler | Activity logging + crash recovery |
-| **Settings** | `.omp/config.yml` deny rules | Destructive commands, credential file reads/writes blocked at config level |
+|---|---|---|
+| **OMP Bash Safety** | OMP's `bash` tool safety guard | Destructive commands, privilege escalation, pipe-to-shell, data exfiltration, container escape, the `/tmp` provenance guard |
+| **OMP Tool Enforcement** | OMP's single-command enforcement | Blocks chaining (`&&`, `\|\|`, `;`, newlines). Enforces "One Command Per Call" |
+| **OMP File-First Protocol** | `run_with_capture.sh` wrapper + OMP tool restrictions | Blocks direct `python`/`python3` execution; enforces file-first audit trail |
+| **OMP Model Ceiling** | OMP's dispatch model tier check | Blocks subagent dispatches above session model tier |
+| **OMP Audit Trail** | OMP native audit logging (`tool_result` handler) | Audit trail for every tool invocation |
+| **OMP Output Scanner** | OMP secret detection (`tool_result` handler) | Secret detection in tool output |
+| **OMP Context Monitor** | OMP's context monitoring (see `omp://compaction.md`) | Context utilization for gating decisions (orchestrator + subagents) |
+| **OMP Session Archiver** | OMP's session archiving (`session_shutdown`) | Session transcript archiving on exit |
+| **OMP Session Recovery** | OMP's session recovery (`session_start`) | Activity logging + crash recovery |
+| **OMP Configuration** | OMP's config-based restrictions | Destructive commands, credential file reads/writes blocked at config level |
 
 ---
 
@@ -275,7 +210,7 @@ Context management is NEVER about reducing the quality or completeness of work. 
 - **Wrong:** `mkdir -p /path && cp file /path && ls /path`
 - **Right:** Three separate `bash` calls, each with one command
 
-The `daaf-enforce-single-command` extension blocks chained commands programmatically.
+OMP's single-command enforcement blocks chained commands programmatically.
 
 ### Shell Script Permissions
 
@@ -285,7 +220,7 @@ The `daaf-enforce-single-command` extension blocks chained commands programmatic
 
 **Temporary and intermediate working files go inside the project, never in `/tmp`.** Use `{PROJECT_DIR}/scripts/scratch/` (create it on first use). It is inside the backup boundary and the audit trail; scratch files are transient by nature but are retained for provenance.
 
-`/tmp` writes are blocked by the `daaf-bash-safety` extension (shell writes) and config deny rules.
+`/tmp` writes are blocked by OMP's bash safety guard (shell writes) and OMP configuration restrictions.
 
 ### Version Control Protocol
 
@@ -345,21 +280,14 @@ See `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for complete script template
 | `agent_reference/INLINE_AUDIT_TRAIL.md` | Script documentation standards (IAT) |
 | `agent_reference/PLAN_TEMPLATE.md` | Research plan template (Full Pipeline) |
 | `agent_reference/PLAN_TASKS_TEMPLATE.md` | Plan Tasks document template (Full Pipeline) |
-| `agent_reference/STATE_TEMPLATE.md` | Session state file template (Full Pipeline) |
-| `agent_reference/STATE_TEMPLATE_ONBOARDING.md` | Session state file template (Data Onboarding mode) |
 | `agent_reference/QA_CHECKPOINTS.md` | QA checkpoint definitions (QA1-QA4b) |
 | `agent_reference/VALIDATION_CHECKPOINTS.md` | Validation checkpoint code templates |
 | `agent_reference/REPORT_TEMPLATE.md` | Output report template |
 | `agent_reference/AI_DISCLOSURE_REFERENCE.md` | AI use attribution and GUIDE-LLM checklist mapping |
 | `agent_reference/REPRODUCTION_REPORT_TEMPLATE.md` | Reproduction Report template (Reproducibility Verification mode) |
-| `agent_reference/WORKFLOW_PHASE1_DISCOVERY.md` | Full pipeline analysis Phase 1: Stages 1-3.5 |
-| `agent_reference/WORKFLOW_PHASE2_PLANNING.md` | Full pipeline analysis Phase 2: Stages 4-4.5 |
-| `agent_reference/WORKFLOW_PHASE3_ACQUISITION.md` | Full pipeline analysis Phase 3: Stages 5-6 |
-| `agent_reference/WORKFLOW_PHASE4_ANALYSIS.md` | Full pipeline analysis Phase 4: Stages 7-10 |
-| `agent_reference/WORKFLOW_PHASE5_SYNTHESIS.md` | Full pipeline analysis Phase 5: Stages 11-12 |
+| `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | workflowz DAG orchestration specification (replaces WORKFLOW_PHASE*.md) |
 | `agent_reference/BOUNDARIES.md` | Agent boundary definitions |
 | `agent_reference/CITATION_REFERENCE.md` | Citation index for pipeline citation propagation and verification |
-| `agent_reference/ERROR_RECOVERY.md` | Error recovery protocols |
 | `agent_reference/DATA_SOURCE_SKILL_TEMPLATE.md` | Data source skill authoring template |
 | `agent_reference/AGENT_TEMPLATE.md` | Agent definition file template |
 | `agent_reference/MODE_TEMPLATE.md` | Engagement mode definition template |

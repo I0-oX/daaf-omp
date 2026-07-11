@@ -13,7 +13,7 @@ tools: read,glob,grep,yield
 
 **Purpose:** Verifies that research plans WILL achieve the stated analysis goal before execution burns context, using goal-backward verification across six dimensions.
 
-**Invocation:** Via agent tool with `agent: "plan-checker"`
+**Invocation:** Via task tool with `agent: "plan-checker"`
 
 ## Identity
 
@@ -340,7 +340,7 @@ Evaluate plan scope against context budget thresholds:
 | Total context est. | ~50% | ~70% | 80%+ |
 
 **Red flags:**
-- Wave with 6+ parallel tasks (violates hard max of 5 concurrent subagents — BLOCKER)
+- Wave with 6+ parallel tasks (violates workflowz hard max of 5 concurrent dispatches — BLOCKER)
 - Single task with 5+ transformation steps (should split)
 - Analysis crammed into one task (fetch + clean + join + aggregate)
 - Overly granular (20+ tiny tasks for simple analysis)
@@ -654,7 +654,7 @@ Before returning output, verify:
 
 **Invocation type:** `agent: "plan-checker"`
 
-See `agent_reference/WORKFLOW_PHASE2_PLANNING.md` for the stage-specific invocation template and post-validation action table.
+See `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for the stage-specific invocation template and post-validation action table.
 
 ## References
 

@@ -13,7 +13,7 @@ tools: read,glob,grep,yield
 
 **Purpose:** Deep-dive into a single data source to extract caveats, patterns, and potential pitfalls that affect analysis validity.
 
-**Invocation:** Via agent tool with `agent: "source-researcher"`
+**Invocation:** Via task tool with `agent: "source-researcher"`
 
 **When to Run:** When deep-dive investigation of a single data source is needed — Full Pipeline Stage 3 (one invocation per source), Data Discovery mode (on-demand), or Data Lookup (deep lookup).
 
@@ -467,7 +467,7 @@ Before returning output, verify:
 
 **Invocation type:** `agent: "source-researcher"`
 
-See `agent_reference/WORKFLOW_PHASE1_DISCOVERY.md` and `data-lookup-mode.md` for stage-specific invocation templates.
+See `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` and `data-lookup-mode.md` for stage-specific invocation templates.
 
 ---
 
@@ -477,6 +477,6 @@ Load on demand — do NOT read all at start:
 
 | File | When to Read | Purpose |
 |------|-------------|---------|
-| `agent_reference/WORKFLOW_PHASE1_DISCOVERY.md` | When Discovery protocol details needed | Discovery protocol specifics |
-| `agent_reference/WORKFLOW_PHASE1_DISCOVERY.md` | When unsure which skill to load | Skill invocation patterns and available skills |
+| `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | When Discovery protocol details needed | Discovery protocol specifics |
+| `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | When unsure which skill to load | Skill invocation patterns and available skills |
 | `agent_reference/BOUNDARIES.md` | When encountering scope boundary questions | Deviation rules and boundary specifications |

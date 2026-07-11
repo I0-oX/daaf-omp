@@ -77,7 +77,7 @@ Provide:
 
 If the question cannot be fully answered from the available skill, say so
 clearly and suggest what additional exploration might help.""",
-    subagent_type: "search-agent"
+    agent: "search-agent"
 })
 ```
 
@@ -116,7 +116,7 @@ only touches one area (e.g., coded values only → focus on VARIABLES section).
 - Supporting detail from the relevant report section(s)
 - Confidence level (HIGH/MEDIUM/LOW) with rationale
 - Any caveats or warnings the user should know""",
-    subagent_type: "source-researcher"
+    agent: "source-researcher"
 })
 ```
 

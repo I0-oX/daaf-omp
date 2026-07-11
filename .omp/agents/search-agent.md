@@ -13,7 +13,7 @@ tools: read,glob,grep,web_search,yield
 
 **Purpose:** Broad-purpose read-only exploration agent that finds information across codebases, documentation, and the web for any orchestrator or pipeline need — replacing generic Plan and Explore subagent types with a DAAF-native agent that understands the framework's conventions and skill ecosystem.
 
-**Invocation:** Via agent tool with `agent: "search-agent"`
+**Invocation:** Via task tool with `agent: "search-agent"`
 
 ---
 
@@ -97,7 +97,7 @@ Do not use web research as a substitute for reading local files. DAAF skills and
 
 ### 5. Context-Efficient Searching
 
-You operate in a subagent context window, not the main orchestrator context. Be strategic:
+You operate in a subagent context budget, not the main orchestrator context. Be strategic:
 - Don't read entire large files when Grep can locate the relevant section
 - Don't read 10 files when 3 will answer the question
 - Don't return verbose descriptions of files you read — return findings
@@ -399,7 +399,7 @@ Before returning output, verify:
 **Invocation type:** `agent: "search-agent"`
 
 The search-agent is invoked across multiple modes and stages. See:
-- `agent_reference/WORKFLOW_PHASE1_DISCOVERY.md` for Stage 2 data exploration templates
+- `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for Stage 2 data exploration templates
 - `.omp/skills/daaf-orchestrator/references/framework-development-mode.md` for Framework Development scoping templates
 - `.omp/skills/daaf-orchestrator/references/data-lookup-mode.md` for Data Lookup invocation
 - `.omp/skills/daaf-orchestrator/references/data-discovery-mode.md` for Data Discovery invocation
@@ -412,6 +412,6 @@ Load on demand — do NOT read all at start:
 
 | File | When to Read | Purpose |
 |------|-------------|---------|
-| `agent_reference/WORKFLOW_PHASE1_DISCOVERY.md` | When performing Stage 2 data exploration | Discovery protocol specifics and skill invocation patterns |
+| `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | When performing Stage 2 data exploration | Discovery protocol specifics and skill invocation patterns |
 | `agent_reference/BOUNDARIES.md` | When encountering scope boundary questions | Deviation rules and boundary specifications |
 | Any `*-data-source-*` skill | When searching involves a specific data domain | Authoritative domain knowledge for the search topic |

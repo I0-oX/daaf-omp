@@ -105,7 +105,7 @@ For ambiguous requests, ask clarifying questions before classifying.
 
 ### Exploration Protocol
 
-Launch **3 search-agent subagents** in parallel to thoroughly explore the relevant existing framework state. These are read-only research agents dispatched via the Agent tool with `subagent_type: "search-agent"` — they can read files, search code, and fetch web pages but cannot write. The exact focus of each subagent depends on the work type:
+Launch **3 search-agent subagents** in parallel to thoroughly explore the relevant existing framework state. These are read-only research agents dispatched via the task tool with `agent: "search-agent"` — they can read files, search code, and fetch web pages but cannot write. The exact focus of each subagent depends on the work type:
 
 **For New Skill:**
 1. **Existing skills survey:** List all skills in the same category (data source, tool, methodology). Read 2-3 exemplar SKILL.md files for structural patterns.
@@ -704,7 +704,6 @@ When the user signals the session is ending, or after Checkpoint 2 approval with
 1. Update SESSION_NOTES.md with a final summary (all sections)
 2. If a research project workspace was created (i.e., the work involved subagent dispatches worth reviewing), collect session logs:
    ```bash
-   bash {BASE_DIR}/scripts/collect_session_logs.sh {PROJECT_DIR}
    ```
 3. Offer a brief summary to the user:
 

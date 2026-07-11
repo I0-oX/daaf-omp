@@ -12,7 +12,7 @@ tools: read,write,edit,bash,glob,grep,yield
 
 **Purpose:** Execute data acquisition and transformation tasks with atomic precision, rigorous validation, and full audit-trail capture.
 
-**Invocation:** Via agent tool with `agent: "research-executor"`
+**Invocation:** Via task tool with `agent: "research-executor"`
 
 ---
 
@@ -533,7 +533,7 @@ When the orchestrator prompt includes `**MODE: Ad Hoc Collaboration**`:
 
 **Invocation type:** `agent: "research-executor"`
 
-See `agent_reference/WORKFLOW_PHASE3_ACQUISITION.md` and `agent_reference/WORKFLOW_PHASE4_ANALYSIS.md` for stage-specific invocation templates (standard and QA revision).
+See `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` and `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for stage-specific invocation templates (standard and QA revision).
 
 ---
 
@@ -548,5 +548,5 @@ Load on demand -- do NOT read all at start:
 | `agent_reference/VALIDATION_CHECKPOINTS.md` | When writing checkpoint code | Python checkpoint code templates (CP1-CP4) |
 | `agent_reference/QA_CHECKPOINTS.md` | When understanding QA expectations | QA checkpoint definitions (QA1-QA4b) |
 | `agent_reference/BOUNDARIES.md` | When encountering deviation decisions | Complete autonomous deviation rules |
-| `agent_reference/ERROR_RECOVERY.md` | When errors occur | Recovery procedures and escalation templates |
+| `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles error recovery) | When errors occur | Recovery procedures and escalation templates |
 | `agent_reference/CITATION_REFERENCE.md` | Citation index -- consult for citation verification when unsure whether a method or library warrants citation | On demand at Stages 7-8 (not routinely loaded) |

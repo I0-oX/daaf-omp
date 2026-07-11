@@ -110,7 +110,7 @@ Common issues?
 Closely read `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for the mandatory file-first execution protocol covering complete code file writing, output capture, and file versioning rules.
 
 **See:**
-- `agent_reference/WORKFLOW_PHASE4_ANALYSIS.md` — Stage 8 (Analysis & Visualization)
+- `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` — Stage 8 (Analysis & Visualization)
 
 The examples below show Plotly syntax. In research workflows, wrap them in scripts following the file-first pattern.
 

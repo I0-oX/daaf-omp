@@ -87,7 +87,7 @@ For datasets with more than 100 columns, profiling scripts that inspect individu
 - **Merge outputs:** After all batches complete, merge per-batch outputs into a single consolidated result before proceeding to the next part
 - **STATE.md tracking:** Record batch boundaries and completion status for each batch
 
-> **Wave barrier discipline (async dispatch).** Column batching is this mode's parallel-dispatch surface: multiple data-ingest invocations for the same profiling script may run concurrently. Subagents dispatched via the Agent tool run in the background by default and return via completion notifications that may arrive one at a time. Treat mid-wave notifications as **status-only**: do not merge per-batch outputs, advance to the next part, or update STATE.md conclusions until EVERY batch invocation in the wave has returned. The merge happens once, over the complete set of batch returns — never incrementally per return. An early return under context pressure, or a failed batch, still counts as that batch's completion — handle re-dispatch as part of the whole-wave merge, not as an immediate mid-wave reaction. The sequential Part A → B → C → D dispatches are governed by the same principle at their gates (see below): each part's completion notification must arrive and its preliminary notes must be persisted before the next part is dispatched.
+> **Wave barrier discipline (async dispatch).** Column batching is this mode's parallel-dispatch surface: multiple data-ingest invocations for the same profiling script may run concurrently. Subagents dispatched via the task tool run in the background by default and return via completion notifications that may arrive one at a time. Treat mid-wave notifications as **status-only**: do not merge per-batch outputs, advance to the next part, or update STATE.md conclusions until EVERY batch invocation in the wave has returned. The merge happens once, over the complete set of batch returns — never incrementally per return. An early return under context pressure, or a failed batch, still counts as that batch's completion — handle re-dispatch as part of the whole-wave merge, not as an immediate mid-wave reaction. The sequential Part A → B → C → D dispatches are governed by the same principle at their gates (see below): each part's completion notification must arrive and its preliminary notes must be persisted before the next part is dispatched.
 
 ## Multi-File Profiling
 
@@ -377,7 +377,7 @@ print(f"CPP4 PASSED: {len(data_dictionary_draft)} columns interpreted, "
 
 ## Invocation Templates
 
-Invocation templates for all profiling, QA, and revision subagent calls. The orchestrator substitutes context-specific values before dispatching.
+Invocation templates for all profiling, QA, and revision subtask calls. The orchestrator substitutes context-specific values before dispatching.
 
 ### Part A: Structural Discovery
 
@@ -436,7 +436,7 @@ Return findings using the Data Ingest Output Format
 - Potential identifiers (>95% unique) and categoricals (<50 unique)
 - Coded value indicators (negative values or sentinels)
 - Conditional Script Decisions for Parts B-D (Script 05, 06, 08, 11 — EXECUTE/SKIP with reason) """,
-    subagent_type: "data-ingest"
+    agent: "data-ingest"
 })
 ```
 
@@ -502,7 +502,7 @@ Return findings using the Data Ingest Output Format
 - CPP2 status, distribution summaries, outlier findings
 - Temporal coverage: [executed/skipped — key findings]
 - Entity coverage: [executed/skipped — key findings] """,
-    subagent_type: "data-ingest"
+    agent: "data-ingest"
 })
 ```
 
@@ -571,7 +571,7 @@ Return findings using the Data Ingest Output Format
 - CPP3 status, recommended key, dependencies, high correlations
 - Coded missing values found, anomaly catalog counts
 - Cross-level linkage findings (if HIERARCHICAL) """,
-    subagent_type: "data-ingest"
+    agent: "data-ingest"
 })
 ```
 
@@ -660,7 +660,7 @@ Return findings using the Data Ingest Output Format
 - Full Preliminary Interpretations table (ALL columns — critical for PSU-DI2 user review)
 - Domain Decomposition table
 - Exclusions Identified table """,
-    subagent_type: "data-ingest"
+    agent: "data-ingest"
 })
 ```
 
@@ -721,7 +721,7 @@ IAT compliance: Required per agent_reference/INLINE_AUDIT_TRAIL.md
 **Checks Performed:** [table]
 **Issues Found:** BLOCKER / WARNING / INFO lists
 **Recommendation:** [PROCEED | REVISION_REQUIRED | ESCALATE]""",
-    subagent_type: "code-reviewer"
+    agent: "code-reviewer"
 })
 ```
 
@@ -729,7 +729,7 @@ IAT compliance: Required per agent_reference/INLINE_AUDIT_TRAIL.md
 
 When a code-reviewer QAP review returns a BLOCKER, the orchestrator re-invokes the data-ingest agent to create a revised script. Use this template:
 
-**Agent:** `subagent_type: "data-ingest"`
+**Agent:** `agent: "data-ingest"`
 
 ```
 **BASE_DIR:** {BASE_DIR}

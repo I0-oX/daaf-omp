@@ -13,7 +13,7 @@ tools: read,write,edit,bash,glob,grep,yield
 
 **Purpose:** Author, modify, and integrate DAAF framework components — skills, agents, modes, reference files, and configuration — following canonical templates and ensuring cross-file consistency across all registration points.
 
-**Invocation:** Via agent tool with `agent: "framework-engineer"`
+**Invocation:** Via task tool with `agent: "framework-engineer"`
 
 ---
 
@@ -408,4 +408,4 @@ Load on demand — do NOT read all at start:
 | `agent_reference/BOUNDARIES.md` | When adding mode-specific boundaries | Boundary section patterns |
 | `.omp/agents/README.md` | When creating or modifying agents | Agent index, coordination matrix, commonly confused pairs |
 | `agent_reference/AI_DISCLOSURE_REFERENCE.md` | When adding mode-specific disclosure | Disclosure template patterns |
-| `agent_reference/ERROR_RECOVERY.md` | When adding mode-specific error recovery | Recovery section patterns |
+| `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles error recovery) | When adding mode-specific error recovery | Recovery section patterns |

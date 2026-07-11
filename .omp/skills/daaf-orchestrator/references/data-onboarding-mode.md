@@ -61,7 +61,7 @@ Data Onboarding is designed for **tabular datasets** — files with rows and col
 │  Stage DI-2: Project Setup                                                  │
 │      ├─ Create research project folder under research/                       │
 │      ├─ Copy raw data into research project data/raw/                        │
-│      ├─ Initialize STATE.md from agent_reference/STATE_TEMPLATE_ONBOARDING.md   │
+│      ├─ Initialize STATE.md from agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md (OMP harness handles state)   │
 │      ├─ Initialize LEARNINGS.md                                             │
 │      ├─ Verify {BASE_DIR}/scripts/run_with_capture.sh is accessible          │
 │      └─ Gate GDI-2: Project folder ready, STATE.md initialized              │
@@ -159,7 +159,7 @@ Data Onboarding is designed for **tabular datasets** — files with rows and col
 │      └─ Gate GDI-7: CPP-SKILL PASSED                                       │
 │                          ↓                                                  │
 │  Stage DI-8: Review & Delivery                                              │
-│      ├─ Collect session logs: collect_session_logs.sh                        │
+│      ├─                         │
 │      ├─ Present completed skill to user for review                          │
 │      ├─ Finalize STATE.md                                                   │
 │      ├─ Consolidate LEARNINGS.md (review entries, populate key sections)     │
@@ -322,8 +322,8 @@ When the user needs to set up an API key and it's not currently available in the
 > You can also type `! export YOUR_API_KEY_NAME="your_key_here"` directly in the OMP prompt to set it for this session.
 
 **Security notes to convey to user:**
-- The `environment_settings.txt` file lives on the host machine (in `daaf-docker/`), is gitignored, and is never visible to Claude inside the container
-- DAAF's safety guardrails prevent Claude from reading or writing environment settings files by design
+- The `environment_settings.txt` file lives on the host machine (in `daaf-docker/`), is gitignored, and is never visible to the agent inside the container
+- DAAF's safety guardrails prevent the agent from reading or writing environment settings files by design
 - The acquisition script references `os.environ["KEY_NAME"]`, never hardcodes the key value
 - The script is archived in the project for reproducibility, but the key value is never in it
 
@@ -436,7 +436,7 @@ Return findings in this structure (max 3500 words):
 |------|-------------|----------|---------|
 | GDI-0 | DI-0 | API key verified, data downloaded, file non-empty, acquisition script archived | API auth fails, empty response, rate limited (conditional — only if access method = API) |
 | GDI-1 | DI-1 | Required inputs collected, file(s) accessible and non-empty, access method determined, file structure classified | File cannot be loaded, file empty, required inputs missing, or API acquisition failed |
-| GDI-2 | DI-2 | Project folder created, STATE.md initialized (from `agent_reference/STATE_TEMPLATE_ONBOARDING.md`), data staged | Folder creation fails |
+| GDI-2 | DI-2 | Project folder created, STATE.md initialized (from `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles state)), data staged | Folder creation fails |
 | GDI-3 | DI-3 | CPP1 PASSED, QAP1 PASSED or WARNING | File >1GB without sampling plan approved by user, or critical columns entirely null |
 | GDI-4 | DI-4 | CPP2 PASSED, QAP2 PASSED or WARNING | >50% of columns are entirely null |
 | GDI-5 | DI-5 | CPP3 PASSED, QAP3 PASSED or WARNING | No candidate keys identifiable across any table |
@@ -452,7 +452,7 @@ Return findings in this structure (max 3500 words):
 
 For EACH profiling part (DI-3 through DI-6), follow this complete cycle. **Do NOT skip any step.** This is the Data Onboarding equivalent of the Full Pipeline's Stage 5-8 Composite Execution Pattern.
 
-> **Wave barrier discipline (async dispatch).** Subagents dispatched via the Agent tool run in the background by default; their completion arrives as async task notifications rather than a synchronous return. The "WAIT for … return before proceeding" steps below therefore mean a hard barrier: do not evaluate QA severity, update STATE.md conclusions, advance to the next part, or present PSU-DI2 until the dispatched subagent has actually returned. Where a step dispatches more than one subagent, wait for ALL of them before acting, and synthesize once over the complete set — a failed or early-returning subagent still counts as a completion to be handled during that whole-set synthesis, not as a mid-wave trigger. See the master statement in `SKILL.md` § Subagent Coordination > "Wave Barrier Discipline (Async Dispatch)."
+> **Wave barrier discipline (async dispatch).** Subagents dispatched via the task tool run in the background by default; their completion arrives as async task notifications rather than a synchronous return. The "WAIT for … return before proceeding" steps below therefore mean a hard barrier: do not evaluate QA severity, update STATE.md conclusions, advance to the next part, or present PSU-DI2 until the dispatched subagent has actually returned. Where a step dispatches more than one subagent, wait for ALL of them before acting, and synthesize once over the complete set — a failed or early-returning subagent still counts as a completion to be handled during that whole-set synthesis, not as a mid-wave trigger. See the master statement in `SKILL.md` § Subagent Coordination > "Wave Barrier Discipline (Async Dispatch)."
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -545,7 +545,7 @@ For EACH profiling part (DI-3 through DI-6), follow this complete cycle. **Do NO
 **Stage DI-8 (Review & Delivery):** Finalizes STATE.md and consolidates LEARNINGS.md as described in the Output Format section. The LEARNINGS.md consolidation protocol for DI-8:
 1. Review LEARNINGS.md entries captured during profiling phases (DI-3 through DI-6)
 2. Ensure **Access/Data Gotchas** and **Data Quality Notes** sections are populated — these are the most relevant sections for onboarding work, since profiling surfaces source-specific quirks that future analyses need to know about
-3. If profiling revealed issues with existing skills, agent protocols, or templates (e.g., "the data source skill template does not account for a pattern we discovered"), add a **System Update Action Plan** section following the same format as Full Pipeline (see `WORKFLOW_PHASE5_SYNTHESIS.md`). Keep it lightweight — only include genuinely generalizable improvements, not project-specific observations.
+3. If profiling revealed issues with existing skills, agent protocols, or templates (e.g., "the data source skill template does not account for a pattern we discovered"), add a **System Update Action Plan** section following the same format as Full Pipeline (see `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md`). Keep it lightweight — only include genuinely generalizable improvements, not project-specific observations.
 4. If no generalizable framework updates were identified, add a brief statement: "No generalizable framework updates identified during this onboarding."
 5. Include the action plan item count (or zero) in the delivery message
 
@@ -578,7 +578,7 @@ Context utilization thresholds from `AGENTS.md` > "Context & Session Health" > "
 
 | Model Family | ELEVATED at | HIGH at | CRITICAL at |
 |--------------|-------------|---------|-------------|
-| **Claude Fable/Mythos-family models** | ≥ 30% or ≥ 300k tokens | ≥ 40% or ≥ 400k tokens | ≥ 50% or ≥ 500k tokens |
+| **Fable/Mythos-family models** | ≥ 30% or ≥ 300k tokens | ≥ 40% or ≥ 400k tokens | ≥ 50% or ≥ 500k tokens |
 | **All other models** (Opus, Sonnet, unknown/alternative providers — conservative default) | ≥ 40% or ≥ 150k tokens | ≥ 60% or ≥ 200k tokens | ≥ 75% or ≥ 250k tokens |
 
 The status levels and their Data Onboarding actions are identical across families (NOMINAL is any utilization below the ELEVATED trigger):
@@ -825,7 +825,7 @@ research/YYYY-MM-DD_{Source_Name}_Onboarding/
 1. **Stage DI-2:** Create the research project folder under `research/`
 2. **Create `data/raw/`** and **`output/preliminary_notes/`** subdirectories inside the research project
 3. **Copy** user-provided data files into `data/raw/`
-4. **Initialize STATE.md** from `{BASE_DIR}/agent_reference/STATE_TEMPLATE_ONBOARDING.md` — this template has onboarding-specific sections (DI-1 through DI-8 stages, Profiling Progress table, Interpretation Tracking, Skill Authoring Status) that differ from the Full Pipeline template. Populate the Data Source Info and User Request sections with intake information.
+4. **Initialize STATE.md** from `{BASE_DIR}/agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md (OMP harness handles state)` — this template has onboarding-specific sections (DI-1 through DI-8 stages, Profiling Progress table, Interpretation Tracking, Skill Authoring Status) that differ from the Full Pipeline template. Populate the Data Source Info and User Request sections with intake information.
 5. **Instruct user** if files need manual placement (e.g., files too large to copy, or user prefers to place them directly)
 
 ---
@@ -836,7 +836,6 @@ research/YYYY-MM-DD_{Source_Name}_Onboarding/
 
 Before presenting to the user, collect session logs into the project:
 ```
-bash {BASE_DIR}/scripts/collect_session_logs.sh {PROJECT_DIR}
 ```
 Then update STATE.md Session Metadata to confirm log collection.
 
@@ -860,7 +859,6 @@ The skill is automatically discoverable via its YAML frontmatter and ready for u
 **Research Project:**
 - Location: [absolute path to research project folder]
 - Contains: [N] profiling scripts, [N] QA reviews, STATE.md, LEARNINGS.md
-- Session logs: `logs/` (collected via `collect_session_logs.sh`)
 
 **Explore Session Logs:**
 To browse the session timeline interactively in your browser, run in the Docker terminal:

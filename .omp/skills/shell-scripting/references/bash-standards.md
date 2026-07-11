@@ -45,7 +45,7 @@ trap 'echo "ERROR: unexpected failure in hook" >&2; exit 2' ERR
 # ... inspection logic with explicit error handling ...
 ```
 
-This pattern is used by `bash-safety.sh` and `enforce-file-first.sh` in DAAF.
+This pattern is used by OMP and the file-first protocol in DAAF.
 
 ---
 

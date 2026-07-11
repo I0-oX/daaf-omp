@@ -113,7 +113,7 @@ Version suffixes follow the convention defined in `AGENTS.md` > "Version Control
 **Refresh Mode:** Replace prior stage output with new findings.
 **Additive Mode:** Supplement prior output with additional findings.
 
-The canonical re-run decision trees live in `agent_reference/ERROR_RECOVERY.md`. The table above is a quick reference for revision-specific scenarios.
+The canonical re-run decision trees live in `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles error recovery). The table above is a quick reference for revision-specific scenarios.
 
 For stages that need re-execution, load `{SKILL_REFS}/full-pipeline-mode.md` and follow the relevant stage's Composite Execution Pattern. All QA requirements from the full pipeline apply to re-executed stages.
 
@@ -127,12 +127,12 @@ When re-executing pipeline stages for a revision, load these files based on the 
 
 | Re-Entry Stage | Load These Files | Key Sections |
 |----------------|-----------------|--------------|
-| Stage 2-3 (Discovery) | `WORKFLOW_PHASE1_DISCOVERY.md` | Stage 2/3 invocation templates, gate criteria |
-| Stage 4-4.5 (Planning) | `WORKFLOW_PHASE2_PLANNING.md` | data-planner invocation, plan-checker validation |
-| Stage 5-6 (Acquisition) | `WORKFLOW_PHASE3_ACQUISITION.md` | Fetch/clean invocation templates + QA pattern |
-| Stage 7-8 (Analysis) | `WORKFLOW_PHASE4_ANALYSIS.md` | Transform/analysis templates + QA pattern |
-| Stage 9-10 (Assembly) | `WORKFLOW_PHASE4_ANALYSIS.md` | Notebook assembly, QA aggregation |
-| Stage 11-12 (Synthesis) | `WORKFLOW_PHASE5_SYNTHESIS.md` | Report generation, final review |
+| Stage 2-3 (Discovery) | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Stage 2/3 invocation templates, gate criteria |
+| Stage 4-4.5 (Planning) | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | data-planner invocation, plan-checker validation |
+| Stage 5-6 (Acquisition) | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Fetch/clean invocation templates + QA pattern |
+| Stage 7-8 (Analysis) | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Transform/analysis templates + QA pattern |
+| Stage 9-10 (Assembly) | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Notebook assembly, QA aggregation |
+| Stage 11-12 (Synthesis) | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Report generation, final review |
 | Any stage | `full-pipeline-mode.md` | QA enforcement protocol, invocation templates, context checklists |
 
 **Progressive loading:** Only load the phase file for the re-entry point and any downstream phases. Do not load all phase files at once.
@@ -195,11 +195,9 @@ All deliverables are new-version copies; originals remain untouched:
 - Updated data files (regenerated, not copied)
 - Notebook (reassembled with final script versions)
 - Report (regenerated to reflect changes)
-- Session logs collected into `logs/` (run `collect_session_logs.sh` before report generation)
 
 **Session Log Collection:** Before Stage 11 (Report), the orchestrator runs:
 ```
-bash {BASE_DIR}/scripts/collect_session_logs.sh {PROJECT_DIR}
 ```
 This collects transcripts from both the original analysis sessions and the revision session(s), since both reference the same project folder basename.
 
@@ -238,8 +236,8 @@ No revision-specific invocation templates are needed — the standard templates 
 **Step 5: Load references.**
 - `revision-and-extension-mode.md` (already loaded)
 - `full-pipeline-mode.md` (for composite execution pattern and QA enforcement)
-- `WORKFLOW_PHASE4_ANALYSIS.md` (for Stage 7-8 invocation templates)
-- `WORKFLOW_PHASE5_SYNTHESIS.md` (for Stage 11-12 templates)
+- `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (for Stage 7-8 invocation templates)
+- `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (for Stage 11-12 templates)
 
 **Step 6: Dispatch subagents.** For each re-executed stage, use the standard invocation template from the relevant WORKFLOW_PHASE file, adding the Revision Context block:
 

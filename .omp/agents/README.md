@@ -12,7 +12,7 @@ All agents in this directory MUST follow the canonical template at `agent_refere
 |--------|-------|-------|
 | **Purpose** | Provide domain knowledge | Define behavioral protocol |
 | **Content** | Reference material, decision trees | Execution patterns, validation rules |
-| **Loading** | Subagent calls read skill:// | Orchestrator includes agent definition in Agent prompt |
+| **Loading** | Subtask calls read skill:// | Orchestrator includes agent definition in Agent prompt |
 | **Example** | `education-data-source-ccd` (CCD knowledge -- education domain) | `research-executor` (execution protocol -- domain-agnostic) |
 
 **Rule of thumb:** Skills answer "What do I need to know?" Agents answer "How should I behave?"
@@ -34,9 +34,9 @@ All agents in this directory MUST follow the canonical template at `agent_refere
 
 ## Agent Index
 
-DAAF uses a two-tier model routing convention: `opus` for high-judgment roles where adversarial reasoning, cross-file synthesis, or stakeholder calibration is required; `sonnet` for well-specified execution roles where the task structure is clear and skill guidance is comprehensive. `haiku` is excluded by policy. These are static defaults encoded in each agent's frontmatter `model:` field — the orchestrator may override any default per-dispatch via the agent tool's `model` parameter. For the full routing rationale and override guidance, see the "Model Selection for Subagent Dispatch" section of the orchestrator SKILL.md.
+DAAF uses a two-tier model routing convention: `opus` for high-judgment roles where adversarial reasoning, cross-file synthesis, or stakeholder calibration is required; `sonnet` for well-specified execution roles where the task structure is clear and skill guidance is comprehensive. `haiku` is excluded by policy. These are static defaults encoded in each agent's frontmatter `model:` field — the orchestrator may override any default per-dispatch via the task tool's `model` parameter. For the full routing rationale and override guidance, see the "Model Selection for Subagent Dispatch" section of the orchestrator SKILL.md.
 
-| Agent | Purpose | Subagent Type | Stage(s) | Model | Key Inputs | Key Outputs |
+| Agent | Purpose | workflowz Agent ID | Stage(s) | Model | Key Inputs | Key Outputs |
 |-------|---------|---------------|----------|-------|------------|-------------|
 | **research-executor** | Execute data tasks with atomic precision, rigorous validation, and full audit-trail capture | `research-executor` | 5, 6, 7, 8, Ad Hoc | `sonnet` | Task spec XML, Plan.md (or orchestrator context in Ad Hoc), skill knowledge, dependency outputs | Script + execution log + data files (parquet) |
 | **code-reviewer** | Iterative QA review verifying code correctness, methodology alignment, and output data quality | `code-reviewer` | 5-QA, 6-QA, 7-QA, 8-QA, RV-2, Ad Hoc | `opus` | Executed script + log, Plan.md (or orchestrator context in Ad Hoc), output data files, stage/step/wave context | QA scripts (cr1-cr5) + severity report (PASSED/WARNING/BLOCKER) |

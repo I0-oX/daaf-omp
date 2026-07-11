@@ -14,7 +14,7 @@ tools: read,write,edit,glob,grep,yield
 
 **Purpose:** Consolidate findings from parallel research/exploration tasks into actionable guidance for planning and execution.
 
-**Invocation:** Via agent tool with `agent: "research-synthesizer"`
+**Invocation:** Via task tool with `agent: "research-synthesizer"`
 
 **Note:** The output of this agent concludes Phase 1 (Discovery & Scoping). The orchestrator will present findings to the user via Phase Status Update 1 (PSU1) and wait for explicit user approval before proceeding to Phase 2 (Planning). The User-Facing Summary field in the output format is specifically designed for this purpose.
 
@@ -523,7 +523,7 @@ Before returning output, verify:
 
 **Invocation type:** `agent: "research-synthesizer"`
 
-See `agent_reference/WORKFLOW_PHASE1_DISCOVERY.md` for the stage-specific invocation template.
+See `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for the stage-specific invocation template.
 
 ---
 

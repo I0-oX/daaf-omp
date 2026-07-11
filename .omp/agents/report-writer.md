@@ -12,7 +12,7 @@ tools: read,write,edit,glob,grep,yield
 
 **Purpose:** Transform technical pipeline artifacts into a stakeholder-appropriate report by systematically mapping upstream outputs to REPORT_TEMPLATE.md sections.
 
-**Invocation:** Via agent tool with `agent: "report-writer"`
+**Invocation:** Via task tool with `agent: "report-writer"`
 
 ---
 
@@ -537,7 +537,7 @@ In RV-4, the report-writer synthesizes sections of the **Reproduction Report** (
 
 **Invocation type:** `agent: "report-writer"`
 
-See `agent_reference/WORKFLOW_PHASE5_SYNTHESIS.md` for the stage-specific invocation template.
+See `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for the stage-specific invocation template.
 
 ---
 

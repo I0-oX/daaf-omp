@@ -187,7 +187,7 @@ This analysis has the following limitations that should be considered when inter
 
 ## AI Use Disclosure
 
-> This analysis was conducted using the **Data Analyst Augmentation Framework (DAAF)** (Kim, 2026), an open-source AI-assisted research orchestration system built on OMP (Anthropic). The following disclosure follows the GUIDE-LLM reporting checklist (Feuerriegel et al., 2026). For complete guidance, see `agent_reference/AI_DISCLOSURE_REFERENCE.md`.
+> This analysis was conducted using the **Data Analyst Augmentation Framework (DAAF)** (Kim, 2026), an open-source AI-assisted research orchestration system built on OMP. The following disclosure follows the GUIDE-LLM reporting checklist (Feuerriegel et al., 2026). For complete guidance, see `agent_reference/AI_DISCLOSURE_REFERENCE.md`.
 
 **Date of analysis:** [AUTO — session date(s) from orchestrator date prefix]
 **DAAF version:** [AUTO — short git commit hash captured at project setup]
@@ -201,9 +201,9 @@ This analysis has the following limitations that should be considered when inter
 
 | Item | Value | Source |
 |------|-------|--------|
-| Model (session) | `[AUTO]` [Session model name and ID in use at session start, from STATE.md Session Metadata — e.g., Claude Opus 4.8 (claude-opus-4-8[1m])] | STATE.md Session Metadata |
-| Specialist models | `[AUTO]` [Distinct subagent-tier model IDs actually dispatched, from STATE.md Subagent Model Tiers — e.g., "opus tier: claude-opus-4-8[1m]; sonnet tier: claude-sonnet-4-5". Record resolved IDs where known, or the tier alias + session date otherwise. See AI_DISCLOSURE_REFERENCE.md > Multi-Model Sessions.] | STATE.md Session Metadata |
-| Provider | `[AUTO]` Anthropic [or the remapped provider(s) if alias env-var overrides were used] | — |
+| Model (session) | `[AUTO]` [Session model name and ID in use at session start, from STATE.md Session Metadata — e.g., the Opus-tier model (<session-model-id>[1m])] | STATE.md Session Metadata |
+| Specialist models | `[AUTO]` [Distinct subagent-tier model IDs actually dispatched, from STATE.md Subagent Model Tiers — e.g., "opus tier: <session-model-id>[1m]; sonnet tier: <session-model-id>". Record resolved IDs where known, or the tier alias + session date otherwise. See AI_DISCLOSURE_REFERENCE.md > Multi-Model Sessions.] | STATE.md Session Metadata |
+| Provider | `[AUTO]` the active provider [or the remapped provider(s) if alias env-var overrides were used] | — |
 | Access method | `[AUTO]` OMP CLI (local execution via API) | — |
 | Date of use | `[AUTO]` [Session date(s)] | STATE.md |
 | Parameters | `[AUTO]` Default API parameters; no user-configured overrides | — |

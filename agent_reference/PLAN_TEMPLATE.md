@@ -516,7 +516,7 @@ If analysis includes 2020 or 2021 data, CP1 Check 7 will flag this automatically
 
 ### Transformation Sequence
 
-**IMPORTANT:** Execute transformations following the Wave-Based Execution Protocol. Tasks in the same wave can run in parallel with independent subagent contexts. Tasks in later waves must wait for all prior waves to complete.
+**IMPORTANT:** Execute transformations following the workflowz Wave-Based Execution Protocol. Tasks in the same wave can run in parallel with independent subagent contexts. Tasks in later waves must wait for all prior waves to complete.
 
 #### Wave-Based Task Table
 

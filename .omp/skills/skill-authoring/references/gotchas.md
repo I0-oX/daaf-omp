@@ -190,7 +190,7 @@ description: A helpful skill. Use when you need to process PDFs or manipulate do
 - Users manually invoking it by name
 - Support questions about when to use it
 
-**Diagnosis:** Ask Claude: "When would you use the [skill name] skill?" Claude will quote the description back. Adjust based on what's missing.
+**Diagnosis:** Ask the model: "When would you use the [skill name] skill?" The model will quote the description back. Adjust based on what's missing.
 
 **Fix:** Make the description more "pushy" — include contexts where the skill should activate even without explicit naming:
 
@@ -379,7 +379,7 @@ Skills are for AI execution, not human documentation.
 - [ ] References are focused (one topic each)
 - [ ] Assets are necessary and minimal
 - [ ] Resources documented in SKILL.md
-- [ ] Scripts handle errors explicitly (don't punt to Claude)
+- [ ] Scripts handle errors explicitly (don't punt to the model)
 - [ ] Script constants are documented (no magic numbers)
 - [ ] Execute vs. read intent is clear for each script
 

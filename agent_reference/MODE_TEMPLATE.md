@@ -32,8 +32,8 @@ Use this template when adding a new engagement mode to the DAAF orchestrator. A 
 
 ### Conditional
 
-8. Add mode-specific error recovery to `agent_reference/ERROR_RECOVERY.md` (if mode has non-trivial error patterns)
-9. Create mode-specific state template in `agent_reference/` (if different from Full Pipeline's STATE_TEMPLATE.md)
+8. Add mode-specific references to `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (if mode has a non-trivial dispatch DAG)
+(OMP harness handles error recovery, state persistence, session archiving, and context management natively — no DAAF templates needed for these.)
 10. Update `AGENTS.md` Reference Files table (if new template file created)
 11. Update `CONTRIBUTING.md` (if mode affects contribution workflow)
 12. Update `user_reference/07_faq_technical.md` (if mode is likely to generate FAQ questions)
@@ -78,13 +78,7 @@ Which agents are used, what subagent types, what context to provide.
 Include a Standard Agent Prompt Structure template if the mode has
 a dedicated agent (like framework-engineer for Framework Development).
 
-If the mode dispatches more than one subagent in a turn, add a wave
-barrier discipline note: mid-wave completion notifications are status-only
-— do not synthesize, advance the workflow, or present user checkpoints
-until EVERY dispatched agent has returned. See `SKILL.md` § Subagent
-Coordination > "Wave Barrier Discipline (Async Dispatch)" for the
-canonical statement, and any existing mode reference for the standard
-blockquote form.]
+If the mode dispatches more than one subagent in a turn via workflowz (`task` batch), add a wave barrier discipline note: mid-wave completion notifications are status-only — do not synthesize, advance the workflow, or present user checkpoints until EVERY dispatched agent has returned. See `SKILL.md` § Subagent Coordination > "Wave Barrier Discipline (Async Dispatch)" and `SKILL.md` > "OMP Tool Integration (workflowz)" for the canonical statement. Use the blockquote convention from existing mode reference files.
 
 ---
 

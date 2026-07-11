@@ -123,7 +123,7 @@ description: Helps with testing.
 
 ### Combating Undertriggering
 
-Claude tends to undertrigger skills — not using them when they'd be useful. Make descriptions slightly "pushy" by including contexts where the skill should activate even if the user doesn't explicitly name it.
+The model tends to undertrigger skills — not using them when they'd be useful. Make descriptions slightly "pushy" by including contexts where the skill should activate even if the user doesn't explicitly name it.
 
 ```yaml
 # Standard (may undertrigger)

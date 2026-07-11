@@ -138,48 +138,7 @@ Consult `.omp/agents/README.md` for the authoritative Agent Index with:
 
 ## Per-Agent Hooks
 
-Agents can register hooks in their YAML frontmatter that fire only when that agent
-is active. This is distinct from project-wide hooks in `settings.json` which fire
-for all contexts.
-
-**When to use per-agent hooks vs project-wide hooks:**
-
-| Scope | Register in | Example |
-|-------|-------------|---------|
-| All agents, all contexts | `settings.json` | `bash-safety.sh` (destructive command prevention) |
-| Specific agents only | Agent frontmatter `hooks` field | `enforce-file-first.sh` (file-first protocol for coding agents) |
-
-**Current per-agent hook: `enforce-file-first.sh`**
-
-Any agent that writes and executes Python scripts via `run_with_capture.sh` MUST
-register this hook. It blocks direct `python`/`python3` invocations, enforcing the
-file-first execution protocol at the hook layer.
-
-Agents that need it: those with `Bash` in `tools` that execute Python scripts
-(currently: research-executor, code-reviewer, debugger, data-ingest).
-
-Agents that do NOT need it: read-only agents (`permissionMode: plan`), agents that
-don't execute Python (report-writer, notebook-assembler), and the orchestrator.
-
-**Frontmatter syntax:**
-
-```yaml
-hooks:
-  PreToolUse:
-    - matcher: "Bash"
-      hooks:
-        - type: command
-          command: "$CLAUDE_PROJECT_DIR/.omp/extensions/daaf-enforce-file-first"
-          timeout: 5
-```
-
-**Hook authoring conventions:**
-- Hook scripts live in `.omp/hooks/` and are protected by deny rules (`Edit(.omp/hooks/*)`, `Write(.omp/hooks/*)`) — human-only deployment
-- Use `exit 2` with stderr message to block Bash commands (convention from `bash-safety.sh`)
-- Use JSON `permissionDecision: deny` output for Agent/Task tool hooks (convention from `enforce-explore-model.sh`)
-- Fail-closed design: ERR trap should block, not allow
-- Verify dependencies (e.g., `jq`) explicitly rather than relying on fallbacks that silently degrade
-
+OMP handles hooks natively (`omp://hooks.md`). Agent-specific hooks can be registered in agent YAML frontmatter via the `hooks` field. For per-agent file-first enforcement on coding agents, see the file-first protocol in AGENTS.md. Hook scripts are managed through OMP's native hook system — no manual `.sh` scripts in `.omp/hooks/` anymore.
 ## Skills in Agent Frontmatter
 
 Agents can preload skills via the `skills` frontmatter field. The skill is loaded

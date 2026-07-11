@@ -1,7 +1,7 @@
 ---
 name: shell-scripting
 description: >-
-  Standards for Bash and PowerShell scripts in DAAF: preambles, quoting, error handling, cleanup, testing. Use when writing or reviewing .sh/.ps1 files (hooks, lifecycle, utilities). Not runtime safety — that is bash-safety.sh hook.
+  Standards for Bash and PowerShell scripts in DAAF: preambles, quoting, error handling, cleanup, testing. Use when writing or reviewing .sh/.ps1 files (hooks, lifecycle, utilities). Not runtime safety — that is OMP's runtime safety enforcement.
 metadata:
   audience: any-agent
   domain: scripting-standards
@@ -11,7 +11,7 @@ metadata:
 
 Coding quality standards and best practices for all `.sh` (Bash) and `.ps1` (PowerShell) scripts within DAAF. Covers preamble conventions, quoting discipline, error handling philosophy, signal/cleanup patterns, Docker interaction, output formatting, testing strategies, and cross-platform gotchas. Use when authoring new shell scripts (hooks, Docker lifecycle, utilities), reviewing existing scripts for compliance, debugging script failures, or setting up CI for shell code.
 
-**Boundary with `bash-safety.sh`:** This skill governs *how to write good scripts* (coding quality). The `bash-safety.sh` hook governs *what commands are safe to run* (runtime safety enforcement). A script can follow every standard in this skill and still be blocked by `bash-safety.sh` if it contains a dangerous command like `rm -rf /`. Conversely, a script that passes `bash-safety.sh` may still be poorly written if it ignores these standards.
+**Boundary with OMP runtime safety:** This skill governs *how to write good scripts* (coding quality). OMP's runtime safety enforcement governs *what commands are safe to run* (runtime safety enforcement). A script can follow every standard in this skill and still be blocked by OMP's bash safety if it contains a dangerous command like `rm -rf /`. Conversely, a script that passes OMP's safety checks may still be poorly written if it ignores these standards.
 
 ## How to Use This Skill
 

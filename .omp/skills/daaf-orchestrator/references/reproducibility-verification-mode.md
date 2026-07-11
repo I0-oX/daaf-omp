@@ -93,7 +93,7 @@ User points to existing analysis folder
                        ▼
 ┌─────────────────────────────────────────────────────┐
 │ Pre-Synthesis: Collect session logs                  │
-│  └─ bash {BASE_DIR}/scripts/collect_session_logs.sh  │
+│  └─ # OMP archives sessions natively  │
 │     {PROJECT_DIR}                                    │
 └──────────────────────┬──────────────────────────────┘
                        │
@@ -172,12 +172,12 @@ User points to existing analysis folder
 
 **Actor:** code-reviewer agent (with reproduction-specific prompt)
 
-**Why code-reviewer:** The code-reviewer's adversarial stance and Five Lenses of Skeptical Review make it ideal for this task. It already has file-first execution capability (enforce-file-first.sh), writes QA-style comparison scripts, and classifies findings by severity. For reproduction, it both re-executes and evaluates — combining the mechanical work with skeptical assessment.
+**Why code-reviewer:** The code-reviewer's adversarial stance and Five Lenses of Skeptical Review make it ideal for this task. It already has file-first execution capability (file-first protocol applies), writes QA-style comparison scripts, and classifies findings by severity. For reproduction, it both re-executes and evaluates — combining the mechanical work with skeptical assessment.
 
 **Per-script atomic cycle:**
 
 1. **COPY:** Copy `original_files/scripts/{stage_dir}/{script_name}` to `scripts/repro/{stage_dir}/{script_name}`
-2. **STRIP:** Remove the execution log from the copy. Find the line matching `# EXECUTION LOG` (or the `# =====` separator immediately preceding it) and delete from that point to EOF. After stripping, verify the file does NOT contain the string `# EXECUTION LOG` — `run_with_capture.sh` will refuse to execute scripts that already have a log marker. Strip in place on the `scripts/repro/` copy (e.g., with the Edit tool); if any intermediate/scratch buffer is needed, write it to `{PROJECT_DIR}/scripts/scratch/`, never `/tmp` (which is outside the backup and audit boundary and blocked by the bash-safety.sh hook).
+2. **STRIP:** Remove the execution log from the copy. Find the line matching `# EXECUTION LOG` (or the `# =====` separator immediately preceding it) and delete from that point to EOF. After stripping, verify the file does NOT contain the string `# EXECUTION LOG` — `run_with_capture.sh` will refuse to execute scripts that already have a log marker. Strip in place on the `scripts/repro/` copy (e.g., with the Edit tool); if any intermediate/scratch buffer is needed, write it to `{PROJECT_DIR}/scripts/scratch/`, never `/tmp` (which is outside the backup and audit boundary and blocked by OMP's bash safety guard).
 3. **EXECUTE:** `bash {BASE_DIR}/scripts/run_with_capture.sh {PROJECT_DIR}/scripts/repro/{stage_dir}/{script_name}`
 4. **COMPARE:** Read both the original script (with original log) and the re-executed script (with new log). Compare:
    - Exit codes
@@ -203,7 +203,7 @@ User points to existing analysis folder
 Agent({
     description: "RV-2: Reproduce script #{N}: {script_name}",
     prompt: """[prompt below]""",
-    subagent_type: "code-reviewer"
+    agent: "code-reviewer"
 })
 ```
 
@@ -315,7 +315,7 @@ Return a concise summary:
 Agent({
     description: "RV-3: Verify Report claims against reproduced outputs",
     prompt: """[prompt below]""",
-    subagent_type: "data-verifier"
+    agent: "data-verifier"
 })
 ```
 
@@ -370,7 +370,6 @@ Return structured findings for orchestrator to populate the Reproduction Report:
 
 Before RV-4 synthesis, collect session logs into the project:
 ```
-bash {BASE_DIR}/scripts/collect_session_logs.sh {PROJECT_DIR}
 ```
 Update the Reproduction Report's Source Artifacts table to confirm `Reproduction Session Logs | logs/ | Yes`.
 
@@ -384,7 +383,7 @@ Update the Reproduction Report's Source Artifacts table to confirm `Reproduction
 Agent({
     description: "RV-4: Synthesize Reproduction Report findings",
     prompt: """[prompt below]""",
-    subagent_type: "report-writer"
+    agent: "report-writer"
 })
 ```
 
@@ -692,7 +691,7 @@ Agent({
     - The script's analytical logic must not be altered.
 
     Diagnose the root cause and return a minimal fix recommendation.""",
-    subagent_type: "debugger"
+    agent: "debugger"
 })
 ```
 
@@ -713,7 +712,7 @@ Trigger points are **model-family-conditional** (percentage OR absolute tokens, 
 
 | Model Family | ELEVATED at | HIGH at | CRITICAL at |
 |--------------|-------------|---------|-------------|
-| **Claude Fable/Mythos-family models** | ≥ 30% or ≥ 300k tokens | ≥ 40% or ≥ 400k tokens | ≥ 50% or ≥ 500k tokens |
+| **Fable/Mythos-family models** | ≥ 30% or ≥ 300k tokens | ≥ 40% or ≥ 400k tokens | ≥ 50% or ≥ 500k tokens |
 | **All other models** (Opus, Sonnet, unknown/alternative providers — conservative default) | ≥ 40% or ≥ 150k tokens | ≥ 60% or ≥ 200k tokens | ≥ 75% or ≥ 250k tokens |
 
 The status levels and their actions are identical across families (NOMINAL is any utilization below the ELEVATED trigger):

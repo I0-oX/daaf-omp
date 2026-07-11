@@ -4,7 +4,7 @@ Skills improve through observation and refinement. This document covers how to t
 
 ## Core Philosophy
 
-**Iterate on a single task first.** The most effective skill creators work through one challenging task until Claude succeeds, then extract the winning approach into the skill. This provides faster signal than broad testing. Once you have a working foundation, expand to multiple test cases for coverage.
+**Iterate on a single task first.** The most effective skill creators work through one challenging task until the model succeeds, then extract the winning approach into the skill. This provides faster signal than broad testing. Once you have a working foundation, expand to multiple test cases for coverage.
 
 ## Creating Test Prompts
 
@@ -61,11 +61,11 @@ Avoid obviously irrelevant queries ("Write a fibonacci function" as a negative t
 
 ### Triggering Diagnosis
 
-If the skill isn't triggering correctly, ask Claude directly:
+If the skill isn't triggering correctly, ask the model directly:
 
 > "When would you use the [skill name] skill?"
 
-Claude will quote the description back. Compare what Claude says with what you intended, and adjust the description to close any gaps.
+The model will quote the description back. Compare what the model says with what you intended, and adjust the description to close any gaps.
 
 ## Multi-Model Testing
 
@@ -73,34 +73,34 @@ Skills act as additions to models, so effectiveness varies by model. Test with a
 
 | Model | Testing Focus |
 |-------|--------------|
-| **Claude Haiku** (fast, economical) | Does the skill provide enough guidance? May need more explicit instructions |
-| **Claude Sonnet** (balanced) | Is the skill clear and efficient? Good baseline test |
-| **Claude Opus** (powerful reasoning) | Does the skill avoid over-explaining? May work with less detail |
+| **Haiku** (fast, economical) | Does the skill provide enough guidance? May need more explicit instructions |
+| **Sonnet** (balanced) | Is the skill clear and efficient? Good baseline test |
+| **Opus** (powerful reasoning) | Does the skill avoid over-explaining? May work with less detail |
 
 What works perfectly for Opus might need more detail for Haiku. If targeting multiple models, aim for instructions that work well across all of them.
 
 ## The Iteration Loop
 
-### Claude A / Claude B Model
+### Model A / Model B Model
 
-The most effective iteration uses two Claude instances:
+The most effective iteration uses two model instances:
 
-- **Claude A** (the designer): Helps you design and refine the skill's instructions
-- **Claude B** (the tester): Uses the skill in real tasks with a fresh context
+- **Model A** (the designer): Helps you design and refine the skill's instructions
+- **Model B** (the tester): Uses the skill in real tasks with a fresh context
 
 **Workflow:**
 
-1. **Work through a task without a skill** with Claude A. Notice what context you repeatedly provide — table names, field definitions, filtering rules, naming conventions
-2. **Ask Claude A to create/improve the skill** based on what you learned
-3. **Review for conciseness** — check that Claude A hasn't added unnecessary explanations. Ask: "Remove the explanation about what X means — Claude already knows that"
-4. **Test with Claude B** (a fresh instance with the skill loaded) on related use cases
-5. **Observe Claude B's behavior** — where does it struggle, succeed, or make unexpected choices?
-6. **Return to Claude A** with specifics: "When Claude B used this skill, it forgot to do X. How should we adjust?"
+1. **Work through a task without a skill** with Model A. Notice what context you repeatedly provide — table names, field definitions, filtering rules, naming conventions
+2. **Ask Model A to create/improve the skill** based on what you learned
+3. **Review for conciseness** — check that Model A hasn't added unnecessary explanations. Ask: "Remove the explanation about what X means — the model already knows that"
+4. **Test with Model B** (a fresh instance with the skill loaded) on related use cases
+5. **Observe Model B's behavior** — where does it struggle, succeed, or make unexpected choices?
+6. **Return to Model A** with specifics: "When model B used this skill, it forgot to do X. How should we adjust?"
 7. **Repeat** until satisfied
 
 ### What to Observe
 
-Pay attention to how Claude actually navigates and uses skills:
+Pay attention to how the model actually navigates and uses skills:
 
 | Observation | What It Means | Action |
 |-------------|---------------|--------|
@@ -124,9 +124,9 @@ Stop when:
 
 For more rigorous skill development, create evaluations **before** writing extensive documentation:
 
-1. **Identify gaps:** Run Claude on representative tasks without a skill. Document specific failures or missing context
+1. **Identify gaps:** Run the model on representative tasks without a skill. Document specific failures or missing context
 2. **Create evaluations:** Build 3 scenarios that test these gaps
-3. **Establish baseline:** Measure Claude's performance without the skill
+3. **Establish baseline:** Measure the model's performance without the skill
 4. **Write minimal instructions:** Create just enough content to address the gaps
 5. **Iterate:** Run evaluations, compare against baseline, refine
 
@@ -150,6 +150,6 @@ Different users encounter different edge cases — team feedback catches scenari
 | Test prompts | 2-3 realistic, specific, natural language |
 | Triggering | Test 8-10 should-trigger + 8-10 should-not-trigger |
 | Multi-model | Test with all target models; adjust detail level |
-| Iteration | Use Claude A (design) / Claude B (test) pattern |
+| Iteration | Use Model A (design) / Model B (test) pattern |
 | Observation | Watch file access patterns, missed references, skipped steps |
 | Stopping | Stop when feedback is empty or progress plateaus |

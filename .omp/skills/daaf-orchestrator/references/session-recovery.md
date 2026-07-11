@@ -166,7 +166,7 @@ Ready to continue from Stage 7, Transformation #4?
 
 ## Recovery from Different Stages (Data Onboarding)
 
-Data Onboarding projects use a different STATE.md structure (from `agent_reference/STATE_TEMPLATE_ONBOARDING.md`) with onboarding-specific sections: DI-0 through DI-8 stages, Profiling Progress table, Interpretation Tracking, Documentation Reconciliation Summary, Skill Authoring Status, and optionally API Access Info and Multi-File Structure sections.
+Data Onboarding projects use a different STATE.md structure (from `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles state)) with onboarding-specific sections: DI-0 through DI-8 stages, Profiling Progress table, Interpretation Tracking, Documentation Reconciliation Summary, Skill Authoring Status, and optionally API Access Info and Multi-File Structure sections.
 
 **Identification:** A Data Onboarding project can be recognized by:
 - STATE.md contains `Phase DI-` stage references instead of numbered Stages 1-12
@@ -177,7 +177,7 @@ Data Onboarding projects use a different STATE.md structure (from `agent_referen
 |-------------------|-----------------|---------------------------|
 | DI-0 (API Acquisition) | Check if acquisition script exists in `scripts/stage5_fetch/`; if data file exists in `data/raw/`, skip DI-0 and proceed to DI-1 file structure classification; if script exists but no data file, re-present script to user for approval and execution; if no script exists, re-invoke data-ingest for DI-0 | STATE.md API Access Info + Profiling Progress row 00 |
 | DI-1 (Intake) | Re-collect missing inputs, verify file accessible | — |
-| DI-2 (Project Setup) | Check project folder structure, verify STATE.md exists | `agent_reference/STATE_TEMPLATE_ONBOARDING.md` |
+| DI-2 (Project Setup) | Check project folder structure, verify STATE.md exists | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles state) |
 | DI-3 (Structural Profile) | Check scripts 01-03 execution status in Profiling Progress table | STATE.md Profiling Progress + current phase scripts |
 | DI-4 (Statistical Profile) | Check scripts 04-06 execution status, note conditional skips | STATE.md Profiling Progress + current phase scripts |
 | DI-5 (Relational Analysis) | Check scripts 07-09 execution status, note conditional skips | STATE.md Profiling Progress + current phase scripts |

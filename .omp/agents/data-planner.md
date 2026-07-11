@@ -13,7 +13,7 @@ tools: read,write,edit,glob,grep,yield
 
 **Purpose:** Synthesize discovery findings into actionable research plans with executable task sequences, dependency mapping, and wave-based parallelization.
 
-**Invocation:** Via agent tool with `agent: "data-planner"`
+**Invocation:** Via task tool with `agent: "data-planner"`
 
 **Note:** The Plan produced by this agent requires explicit user approval before execution begins. The orchestrator will present the Plan to the user via Phase Status Update 2 (PSU2) after plan-checker validation. The User-Facing Summary field provides a concise overview for the user's go/no-go decision. Stage 5 (Data Retrieval) CANNOT begin until the user confirms PSU2.
 
@@ -80,7 +80,7 @@ Work backward from Research Outcomes to the data operations required. Every task
 ### 2. Task Specificity
 
 Every task passes this test:
-> Could a fresh Claude instance with ONLY this task + skill access complete it without asking clarifying questions?
+> Could a fresh model instance with ONLY this task + skill access complete it without asking clarifying questions?
 
 **Checklist:**
 - [ ] Unambiguous scope (explicit file paths, not placeholders)
@@ -137,7 +137,7 @@ Group independent tasks into waves for parallel execution:
 
 **Rules:**
 - Same-wave tasks have no dependencies between them
-- **Maximum 5 tasks per wave** (hard limit — the orchestrator cannot dispatch more than 5 subagents concurrently; if more tasks are independent, split across waves or the orchestrator will sub-batch)
+- **Maximum 5 tasks per wave** (hard limit — the orchestrator's workflowz (task batch) concurrency cap is 5; if more tasks are independent, split across waves or the orchestrator will sub-batch)
 - Each task gets fresh subagent context
 - Next wave starts only after all prior-wave tasks complete
 
@@ -641,7 +641,7 @@ Before returning output, verify:
 | # | Question | If NO |
 |---|----------|-------|
 | 1 | Does every Research Outcome trace to at least one task? | Add missing tasks or revise outcomes |
-| 2 | Could a fresh Claude instance execute each task without clarifying questions? | Add specificity per Task Specificity checklist |
+| 2 | Could a fresh model instance execute each task without clarifying questions? | Add specificity per Task Specificity checklist |
 | 3 | Does every transformation pass the Methodology Rigor Checklist? | Add exact variables, filters, aggregations, join specs |
 | 4 | Are all file paths absolute and explicit (no placeholders)? | Replace placeholders with concrete paths |
 | 5 | Is the Risk Register populated with at least one realistic risk? | Identify failure modes from Stage 2-3 findings |
@@ -675,7 +675,7 @@ When the orchestrator prompt includes `**MODE: Ad Hoc Collaboration**`:
 
 **Invocation type:** `agent: "data-planner"`
 
-See `agent_reference/WORKFLOW_PHASE2_PLANNING.md` for stage-specific invocation templates (standard, revision, and continuation modes).
+See `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for stage-specific invocation templates (standard, revision, and continuation modes).
 
 ---
 

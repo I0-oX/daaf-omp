@@ -236,7 +236,7 @@ Reference file density:
 - Line count: SKILL.md [N] lines, reference files [N] total lines ([ratio]x)
 - Reference files created: [list with line counts]
 - Skill maturity: Initial characterization (v1) — see delivery notes""",
-    subagent_type: "general-purpose"
+    agent: "general-purpose"
 })
 ```
 

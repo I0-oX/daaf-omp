@@ -84,7 +84,7 @@ Follow the format of existing agent subsections in this file.
 **Condition:** Agent operates within a specific stage
 **Section:** The individual stage section (e.g., "Stage 7: EDA & Transformation")
 **What to add:** Agent/subagent subsection or update to existing section
-**Phase mapping:** Stages 1-3.5 → `WORKFLOW_PHASE1_DISCOVERY.md`, Stages 4-4.5 → `WORKFLOW_PHASE2_PLANNING.md`, Stages 5-6 → `WORKFLOW_PHASE3_ACQUISITION.md`, Stages 7-10 → `WORKFLOW_PHASE4_ANALYSIS.md`, Stages 11-12 → `WORKFLOW_PHASE5_SYNTHESIS.md`
+**Phase mapping:** Stages 1-3.5 → `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md`, Stages 4-4.5 → `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md`, Stages 5-6 → `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md`, Stages 7-10 → `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md`, Stages 11-12 → `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md`
 
 ### 11. Appropriate `agent_reference/WORKFLOW_PHASE*.md` — Stage invocation template
 
@@ -99,7 +99,7 @@ Follow the format of existing agent subsections in this file.
 **Section:** "Orchestration Flow" (ASCII diagram)
 **What to add:** Agent box in the relevant position
 
-### 13. `agent_reference/ERROR_RECOVERY.md` — Error Recovery Routing
+### 13. `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` — Error Recovery Routing
 
 **Condition:** Agent handles specific error types or participates in error recovery
 **Section:** "Error Recovery Routing"
@@ -122,12 +122,12 @@ Follow the format of existing agent subsections in this file.
 | 16 | `agent_reference/BOUNDARIES.md` | Agent has special deviation authority or unique boundaries |
 | 17 | `agent_reference/VALIDATION_CHECKPOINTS.md` | Agent runs validation checkpoints |
 | 18 | `agent_reference/QA_CHECKPOINTS.md` | Agent participates in QA review |
-| 19 | `agent_reference/ERROR_RECOVERY.md` | Agent handles specific error types |
+| 19 | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Agent handles specific error types |
 | 20 | `AGENTS.md` > "Context & Session Health" | Agent has special context considerations |
 | 21 | `full-pipeline-mode.md` > "Learning Signal Protocol" | Agent generates learning signals |
 | 22 | `agent_reference/PLAN_TEMPLATE.md` | Agent reads or writes Plan.md |
 | 23 | `agent_reference/PLAN_TASKS_TEMPLATE.md` | Agent reads or writes Plan_Tasks.md |
-| 24 | `agent_reference/STATE_TEMPLATE.md` | Agent affects STATE.md fields |
+| 24 | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Agent affects STATE.md fields |
 | 25 | `user_reference/02_understanding_daaf.md` | Agent changes the architecture description for users |
 | 26 | `user_reference/04_extending_daaf.md` | Agent enables new extension patterns |
 | 27 | `user_reference/07_faq_technical.md` | Agent affects common technical questions |
@@ -211,7 +211,7 @@ done
 - [ ] agent_reference/WORKFLOW_PHASE*.md — Individual stage section (if stage-specific)
 - [ ] agent_reference/WORKFLOW_PHASE*.md — Stage invocation template (if unique invocation template)
 - [ ] .omp/agents/README.md — Orchestration Flow diagram (if changes workflow)
-- [ ] agent_reference/ERROR_RECOVERY.md — Error Recovery Routing (if handles errors)
+- [ ] WORKFLOWZ_DAG_SPECIFICATION.md — Error Recovery Routing (if handles errors)
 - [ ] Agent file — `skills:` frontmatter field (if uses skills)
 
 ### Tier 3: CONDITIONAL (review applicability)
@@ -219,12 +219,12 @@ done
 - [ ] agent_reference/BOUNDARIES.md (if special boundaries)
 - [ ] agent_reference/VALIDATION_CHECKPOINTS.md (if runs checkpoints)
 - [ ] agent_reference/QA_CHECKPOINTS.md (if participates in QA)
-- [ ] agent_reference/ERROR_RECOVERY.md (if handles error types)
+- [ ] WORKFLOWZ_DAG_SPECIFICATION.md (if handles error types)
 - [ ] AGENTS.md > "Context & Session Health" (if special context needs)
 - [ ] full-pipeline-mode.md > "Learning Signal Protocol" (if generates learning signals)
 - [ ] agent_reference/PLAN_TEMPLATE.md (if reads/writes Plan.md)
 - [ ] agent_reference/PLAN_TASKS_TEMPLATE.md (if reads/writes Plan_Tasks.md)
-- [ ] agent_reference/STATE_TEMPLATE.md (if affects STATE.md)
+- [ ] WORKFLOWZ_DAG_SPECIFICATION.md (if affects STATE.md)
 - [ ] user_reference/02_understanding_daaf.md (if changes architecture)
 - [ ] user_reference/04_extending_daaf.md (if enables new extensions)
 - [ ] user_reference/07_faq_technical.md (if affects FAQs)

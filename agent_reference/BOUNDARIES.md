@@ -105,7 +105,7 @@ These actions are **prohibited** under all circumstances.
 | Store PII or sensitive data unencrypted | Privacy violation |
 | Share data outside the research folder | Data governance |
 | Expose raw data in public outputs | Privacy risk |
-| Write working files to `/tmp` (redirects, `cp`/`mv`/`tee`/`mkdir`/`touch`, downloads, `sed -i`, extraction, `git clone`) | Provenance loss — `/tmp` is outside the backup and audit boundary; blocked by the `bash-safety.sh` extension and `config.yml` deny rules. Correct approach: use `{PROJECT_DIR}/scripts/scratch/`. Reading DAAF's `/tmp` coordination caches is fine — only writes are blocked
+| Write working files to `/tmp` (redirects, `cp`/`mv`/`tee`/`mkdir`/`touch`, downloads, `sed -i`, extraction, `git clone`) | Provenance loss — `/tmp` is outside the backup and audit boundary; blocked by OMP's bash tool safety guardrails. Correct approach: use `{PROJECT_DIR}/scripts/scratch/`. Reading DAAF's `/tmp` coordination caches is fine — only writes are blocked
 
 ### Analysis Integrity
 
@@ -237,7 +237,7 @@ User Support is DAAF's lightest mode — a read-only, conversational interaction
 - Skipping QA for an entire stage (never allowed in Full Pipeline mode)
 - Changing QA script naming convention
 
-**BLOCKER Escalation:** See `ERROR_RECOVERY.md` § QA BLOCKER Recovery for the full escalation flow.
+**BLOCKER Escalation:** See `WORKFLOWZ_DAG_SPECIFICATION.md` (OMP handles error recovery) § QA BLOCKER Recovery for the full escalation flow.
 
 ---
 
@@ -610,7 +610,7 @@ Is this an improvement or optimization not required for correctness?
 - Rows: {count}
 - Files: {file list}
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Co-Authored-By: DAAF <daaf@local>
 ```
 
 **Types:**
@@ -632,7 +632,7 @@ feat(05-01): Fetch CCD school enrollment data
 - Rows: 98,234
 - Files: data/raw/2026-01-31_ccd_schools.parquet
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Co-Authored-By: DAAF <daaf@local>
 ```
 
 **Data Cleaning (Stage 6):**
@@ -644,7 +644,7 @@ feat(06-01): Clean CCD data, filter coded values
 - Suppression rate: 12%
 - Files: data/processed/2026-01-31_ccd_clean.parquet
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Co-Authored-By: DAAF <daaf@local>
 ```
 
 **Transformation (Stage 7):**
@@ -655,7 +655,7 @@ feat(07-02): Join CCD schools with MEPS poverty data
 - Rows: 91,847 (1:1 cardinality confirmed)
 - Files: data/processed/2026-01-31_analysis.parquet
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Co-Authored-By: DAAF <daaf@local>
 ```
 
 **Bug Fix During Execution:**
@@ -666,7 +666,7 @@ fix(07-02): Correct type mismatch in year filter
 - Resolution: Changed filter to use string comparison
 - Rows affected: All (was filtering to 0)
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Co-Authored-By: DAAF <daaf@local>
 ```
 
 ### Wave Completion Commit
@@ -682,7 +682,7 @@ Completed tasks:
 
 Updated: STATE.md transformation progress
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Co-Authored-By: DAAF <daaf@local>
 ```
 
 ### What NOT to Commit
@@ -724,7 +724,7 @@ These conditions trigger an immediate STOP with escalation to user.
 
 ### STOP Message Format
 
-See `ERROR_RECOVERY.md` "Escalation Format" for the authoritative STOP/escalation message template.
+See `WORKFLOWZ_DAG_SPECIFICATION.md` (OMP handles error recovery) "Escalation Format" for the authoritative STOP/escalation message template.
 
 ---
 

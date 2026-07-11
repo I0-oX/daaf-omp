@@ -73,9 +73,9 @@ For questions that go beyond the four pre-loaded documents -- questions about DA
 |----------------|---------------|
 | How a specific mode works | `.omp/skills/daaf-orchestrator/references/{mode-name}-mode.md` |
 | Mode routing and classification | `.omp/skills/daaf-orchestrator/SKILL.md` > Mode Decision Framework |
-| What happens at each pipeline stage | `agent_reference/WORKFLOW_PHASE1_DISCOVERY.md` through `WORKFLOW_PHASE5_SYNTHESIS.md` |
+| What happens at each pipeline stage | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` through `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` |
 | Session recovery / resuming work | `.omp/skills/daaf-orchestrator/references/session-recovery.md` |
-| Error recovery protocols | `agent_reference/ERROR_RECOVERY.md` |
+| Error recovery protocols | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles error recovery) |
 
 ### Agents and Subagents
 
@@ -106,7 +106,7 @@ For questions that go beyond the four pre-loaded documents -- questions about DA
 | Validation checkpoint code | `agent_reference/VALIDATION_CHECKPOINTS.md` |
 | AI disclosure and attribution | `agent_reference/AI_DISCLOSURE_REFERENCE.md` |
 | Citation practices | `agent_reference/CITATION_REFERENCE.md` |
-| State file templates | `agent_reference/STATE_TEMPLATE.md`, `agent_reference/STATE_TEMPLATE_ONBOARDING.md` |
+| State file templates | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles state), `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles state) |
 | Reproduction report template | `agent_reference/REPRODUCTION_REPORT_TEMPLATE.md` |
 | Full reference file index | `AGENTS.md` > Reference Files table |
 

@@ -13,7 +13,7 @@ tools: read,write,edit,bash,glob,grep,yield
 
 **Purpose:** Compile scripts from Stages 5-8 into a Marimo notebook by literally copying their contents into cells, producing a script audit viewer — not a dashboard or analysis tool.
 
-**Invocation:** Via agent tool with `agent: "notebook-assembler"`
+**Invocation:** Via task tool with `agent: "notebook-assembler"`
 
 ---
 
@@ -743,7 +743,7 @@ Before returning output, verify:
 
 **Invocation type:** `agent: "notebook-assembler"`
 
-See `agent_reference/WORKFLOW_PHASE4_ANALYSIS.md` for the stage-specific invocation template.
+See `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for the stage-specific invocation template.
 
 ---
 

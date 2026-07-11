@@ -146,7 +146,7 @@ The orchestrator dispatches to a specialized agent when:
 
 ### Dispatch Table
 
-| User Need | `subagent_type` | Notes |
+| User Need | `agent` | Notes |
 |-----------|----------------|-------|
 | Write or run analysis code | `research-executor` | Orchestrator frames the user's request as a `<task>` block. When the task involves statistical modeling, use the `data-scientist` skill's routing tree (Related Skills > Statistical modeling section) to select the library: `statsmodels` for standard regression/GLM/diagnostics/time series, `pyfixest` for fixed effects/DiD/IV, `linearmodels` for random effects/IV-GMM/SUR, `svy` for complex survey analysis, `geopandas` for spatial regression, `scikit-learn` for clustering/prediction ML. Include the selected library in the task block. |
 | Debug a script or diagnose an error | `debugger` | User provides script path + error description |
@@ -351,7 +351,7 @@ These boundaries supplement the universal safety boundaries in `AGENTS.md`. See 
 
 ### Always Do
 
-- Maintain file-first execution for all code produced by agents (`enforce-file-first` hook applies)
+- Maintain file-first execution for all code produced by agents (file-first protocol applies)
 - Follow IAT documentation standards (`# INTENT:`, `# REASONING:`, `# ASSUMES:`) in any code produced
 - Save all scripts and outputs to the workspace
 - Relay agent findings to user with contextual framing
@@ -404,7 +404,6 @@ There is no mandatory wrap-up protocol. The session ends when the user is done. 
 
 1. Collect session logs into the project workspace:
    ```bash
-   bash {BASE_DIR}/scripts/collect_session_logs.sh {PROJECT_DIR}
    ```
 2. Update SESSION_NOTES.md with a final summary
 3. Offer a brief summary to the user:

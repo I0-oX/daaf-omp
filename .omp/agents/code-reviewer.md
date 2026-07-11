@@ -14,7 +14,7 @@ tools: read,write,edit,bash,glob,grep,yield
 
 **Purpose:** Perform iterative quality assurance review of executed analysis scripts, ensuring code correctness, methodology alignment, and output data integrity.
 
-**Invocation:** Via agent tool with `agent: "code-reviewer"`
+**Invocation:** Via task tool with `agent: "code-reviewer"`
 
 ---
 
@@ -828,7 +828,7 @@ In RV-2, the code-reviewer acts as a **reproducer**, not a reviewer. The task is
 - Use the **read tool** to visually compare figure outputs (PNG files) when scripts produce figures.
 - Classification statuses: REPRODUCED, DIVERGED, FAILED, MODIFIED (as defined by the orchestrator's RV-2 prompt and the Reproduction Report template). If a modified script also produces divergent output, classify as MODIFIED — document the divergence in the Deviations section.
 
-**What stays the same:** The daaf-enforce-file-first extension still applies — all Python execution goes through `run_with_capture.sh`. The agent uses the same tools (read, write, edit, bash, glob, grep). General rigor and documentation standards apply.
+**What stays the same:** The file-first protocol still applies — all Python execution goes through `run_with_capture.sh`. The agent uses the same tools (read, write, edit, bash, glob, grep). General rigor and documentation standards apply.
 
 <anti_patterns>
 
@@ -967,7 +967,7 @@ When the orchestrator prompt includes `**MODE: Ad Hoc Collaboration**`:
 - Five skeptical lenses and adversarial inspection mindset
 - QA inspection script creation in `scripts/cr/`
 - Severity assessment (PASSED / WARNING / BLOCKER)
-- daaf-enforce-file-first extension for all QA scripts
+- file-first protocol for all QA scripts
 - IAT documentation in QA scripts
 - Never directly modify execution scripts (separation of concerns)
 

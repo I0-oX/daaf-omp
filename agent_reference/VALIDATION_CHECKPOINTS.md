@@ -43,7 +43,7 @@ Not all checkpoints require the same level of human involvement. Use this classi
 
 ### checkpoint:auto (Default)
 
-**Definition:** Claude executes and validates automatically. No human interaction needed unless a STOP condition is triggered.
+**Definition:** The agent executes and validates automatically. No human interaction needed unless a STOP condition is triggered.
 
 **Applies To:**
 - CP1 post-fetch validation (when data is returned successfully)
@@ -72,7 +72,7 @@ Not all checkpoints require the same level of human involvement. Use this classi
 
 ### checkpoint:human-verify (Report and Confirm)
 
-**Definition:** Claude automates the action, then reports results for human confirmation before proceeding to the next major step.
+**Definition:** The agent automates the action, then reports results for human confirmation before proceeding to the next major step.
 
 **Applies To:**
 - Unusual suppression patterns (30-50% range)
@@ -158,7 +158,7 @@ Which approach would you prefer?
 
 ### checkpoint:human-action (User Must Execute)
 
-**Definition:** Claude cannot automate this step. User must perform the action themselves.
+**Definition:** the agent cannot automate this step. User must perform the action themselves.
 
 **Applies To:**
 - External system authentication (e.g., restricted databases)
@@ -167,7 +167,7 @@ Which approach would you prefer?
 - API key configuration
 - Credential management
 - Physical verification (e.g., confirming data received)
-- Approval workflows outside Claude's access
+- Approval workflows outside the agent's access
 
 **Behavior:**
 1. Explain what needs to happen
@@ -198,7 +198,7 @@ Please confirm when the file is in place, and I'll continue with the analysis.
 
 ### Key Rule: Automation Preference
 
-**If Claude CAN automate (data access call, file operation, code execution), Claude MUST automate.**
+**If the agent CAN automate (data access call, file operation, code execution), the agent MUST automate.**
 
 Reserve human checkpoints for genuinely necessary cases:
 
@@ -217,7 +217,7 @@ Reserve human checkpoints for genuinely necessary cases:
 ### Classification Decision Tree
 
 ```
-Can Claude execute this action automatically?
+Can the agent execute this action automatically?
 ├─ NO → checkpoint:human-action
 └─ YES → Continue
 

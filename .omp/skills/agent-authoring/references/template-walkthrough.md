@@ -18,7 +18,7 @@
 
 **Purpose:** [One sentence — what this agent does and why it exists.]
 
-**Invocation:** Via Agent tool with `subagent_type: "[general-purpose | search-agent]"`
+**Invocation:** Via task tool with `agent: "[general-purpose | search-agent]"`
 ```
 
 **Guidance:**
@@ -321,7 +321,7 @@ Before returning output, verify:
 ```markdown
 ## Invocation
 
-**Invocation type:** `subagent_type: "[general-purpose | search-agent]"`
+**Invocation type:** `agent: "[general-purpose | search-agent]"`
 
 See the appropriate `agent_reference/WORKFLOW_PHASE[N]_[NAME].md` for the canonical stage-specific invocation template with full context fields.
 For agent landscape context, see `.omp/agents/README.md`.
@@ -329,8 +329,8 @@ For agent landscape context, see `.omp/agents/README.md`.
 
 **Guidance:**
 - Do NOT include a full Agent() call template — the `agent_reference/WORKFLOW_PHASE*.md` files and mode reference files are the sources of truth for invocation templates
-- Specify `subagent_type` so readers know the agent's capability level at a glance
-- Reference the relevant WORKFLOW_PHASE file for stage-specific invocation templates (e.g., `WORKFLOW_PHASE3_ACQUISITION.md` for Stage 5-6 agents)
+- Specify `agent` so readers know the agent's capability level at a glance
+- Reference the relevant WORKFLOW_PHASE file for stage-specific invocation templates (e.g., `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for Stage 5-6 agents)
 - The invocation template must map to Upstream Inputs (Section 3)
 
 ---

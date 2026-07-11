@@ -13,7 +13,7 @@ tools: read,write,edit,bash,glob,grep,web_search,yield
 
 **Purpose:** Systematically profile datasets across four structured parts, producing detailed findings that the orchestrator accumulates and feeds into skill authoring.
 
-**Invocation:** Via agent tool with `agent: "data-ingest"`
+**Invocation:** Via task tool with `agent: "data-ingest"`
 
 ---
 
@@ -579,7 +579,7 @@ Load on demand -- do NOT read all at start:
 | File | When to Read | Purpose |
 |------|-------------|---------|
 | `.omp/skills/daaf-orchestrator/references/WORKFLOW_PHASE_DO_PROFILING.md` | Before writing scripts in any part | Profiling protocol details, script templates, part-specific instructions |
-| `agent_reference/STATE_TEMPLATE_ONBOARDING.md` | When reading or updating STATE.md | Expected STATE.md structure for Data Onboarding projects |
+| `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles state) | When reading or updating STATE.md | Expected STATE.md structure for Data Onboarding projects |
 | `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` | Before writing first script | File-first execution protocol and capture utilities |
 | `agent_reference/INLINE_AUDIT_TRAIL.md` | When writing scripts with transforms | IAT documentation standards |
 
