@@ -404,9 +404,9 @@ Use this skeleton instead of (or in addition to) the mirror-based skeleton above
 ### Prerequisites
 
 > **API Key Required:** This data source requires authentication.
-> Add `[ENV_VAR_NAME]=your_key_here` to the `environment_settings.txt` file in your `daaf-docker/` folder
-> (copy `environment_settings_example.txt` to `environment_settings.txt` if you haven't already), then recreate the container: `docker compose down` followed by `run_daaf`.
-> See the [Installation Guide — Set up data source API keys](../user_reference/01_installation_and_quickstart.md#set-up-data-source-api-keys) for setup instructions.
+> Provide the key via host environment injection (`environment_settings.txt` on dockerized hosts, or shell env / provider auth for bare OMP).
+> Setup steps: root `README.md` → **Credentials / data-source API keys**.
+> Never commit keys; never create `.env` files from research scripts.
 
 | Requirement | Details |
 |-------------|---------|

@@ -977,7 +977,7 @@ When the orchestrator prompt includes `**MODE: Ad Hoc Collaboration**`:
 
 **Invocation type:** `agent: "code-reviewer"`
 
-See `full-pipeline-mode.md` and the appropriate `agent_reference/WORKFLOW_PHASE*.md` for stage-specific invocation templates and the revision flow diagram.
+See `full-pipeline-mode.md` and the appropriate `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` and `.omp/agents/README.md` for stage-specific invocation templates and the revision flow diagram.
 
 ---
 

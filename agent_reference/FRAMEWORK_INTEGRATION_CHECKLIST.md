@@ -33,7 +33,7 @@ After completing each item, note the status: Done, Skipped (with reason), or N/A
 | S7 | Verify description triggers appropriately (no undertriggering or overtriggering) | [M] | `.omp/skills/{skill-name}/SKILL.md` | Test with realistic prompts |
 | S8 | If skill should be preloaded by an agent, add to that agent's `skills:` frontmatter | [C] | `.omp/agents/{agent-name}.md` | YAML frontmatter `skills` field |
 | S9 | If skill is used in a specific pipeline stage, add to `full-pipeline-mode.md` > Skill-to-Stage Mapping | [C] | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` | Skill-to-Stage Mapping table |
-| S10 | If skill is used in WORKFLOW_PHASE invocation templates, add reference there | [C] | `agent_reference/WORKFLOW_PHASE*.md` | Stage-specific invocation template |
+| S10 | If skill is used in mode/reference invocation templates, add reference there | [C] | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` and `.omp/agents/README.md` | Stage-specific invocation template |
 
 ### Modifying an Existing Skill
 
@@ -57,7 +57,7 @@ After completing each item, note the status: Done, Skipped (with reason), or N/A
 | # | Item | Req | File | Section / Location |
 |---|------|-----|------|--------------------|
 | A1 | Create agent file following AGENT_TEMPLATE.md (all 12 sections) | [M] | `.omp/agents/{agent-name}.md` | 400-700 lines target |
-| A1b | Assign `model:` frontmatter tier (`opus` or `sonnet`) per orchestrator SKILL.md Model Selection guidance | [M] | `.omp/agents/{agent-name}.md` | YAML frontmatter `model` field; two-tier policy (haiku excluded) — see `.omp/skills/daaf-orchestrator/SKILL.md` > "Model Selection for Subagent Dispatch" |
+| A1b | Assign `model:` frontmatter role (`pi/slow` high-judgment or `pi/task` execution) per orchestrator SKILL.md Default Model Tiers | [M] | `.omp/agents/{agent-name}.md` | YAML frontmatter `model` field |
 | A2 | Verify Core Distinction table differentiates from closest neighbors | [M] | `.omp/agents/{agent-name}.md` | Section 2: Identity |
 | A3 | Add to Agent Index table | [M] | `.omp/agents/README.md` | Agent Index table |
 | A4 | Add "When to Use" subsection | [M] | `.omp/agents/README.md` | When to Use section |
@@ -66,13 +66,13 @@ After completing each item, note the status: Done, Skipped (with reason), or N/A
 | A7 | Update Orchestration Flow diagram if agent participates in pipeline | [C] | `.omp/agents/README.md` | Orchestration Flow ASCII diagram |
 | A8 | Add to Subagent Type Selection table in orchestrator SKILL.md | [C] | `.omp/skills/daaf-orchestrator/SKILL.md` | Named Agents table |
 | A9 | Add to `full-pipeline-mode.md` Core Workflow tables if stage-specific | [C] | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` | Core Workflow, Handoffs, Stage Gates tables |
-| A10 | Add invocation pattern to `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (if agent participates in pipeline waves) | [C] | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Wave structure section |
+| A10 | Add invocation pattern to full-pipeline-mode.md when the agent needs stage-specific context beyond agents README | [C] | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` | Stage / context sections |
 | A11 | Add to BOUNDARIES.md if agent has unique boundary considerations | [C] | `agent_reference/BOUNDARIES.md` | Appropriate section |
 | A12 | (Handled by OMP harness — no DAAF-level error recovery registration needed) | — | — | — |
-| A13 | Register per-agent extensions in frontmatter if coding agent | [C] | `.omp/agents/{agent-name}.md` | YAML `extensions` field (e.g., the file-first protocol) |
-| A14 | Update root `README.md` Agent Ecosystem table and agent count | [M] | `README.md` (project root) | Agent Ecosystem section |
-| A15 | Update AGENTS.md if agent affects documented workflows | [C] | `AGENTS.md` | Relevant section |
-| A16 | Update `user_reference/` docs if agent is user-visible | [C] | `user_reference/*.md` | Relevant descriptions |
+| A13 | Prefer instructional policy over per-agent shell extensions (this port has no `.omp/extensions/` hooks) | [C] | `.omp/agents/{agent-name}.md` | Document file-first / tool constraints in agent body |
+| A14 | Update root `README.md` agent table and agent count | [M] | `README.md` (project root) | Agents section |
+| A15 | Update AGENTS.md if agent affects documented workflows | [C] | `.omp/AGENTS.md` | Relevant section |
+| A16 | *(N/A in this port)* `user_reference/` is not shipped — put user-visible notes in `README.md` | [C] | `README.md` | Usage / agents |
 
 ### Modifying an Existing Agent
 
@@ -82,7 +82,7 @@ After completing each item, note the status: Done, Skipped (with reason), or N/A
 | AM2 | Verify changes don't overlap with another agent's responsibilities | [M] | `.omp/agents/README.md` | Commonly Confused Pairs |
 | AM3 | If changing the agent's scope, update README.md When to Use + Coordination Matrix | [C] | `.omp/agents/README.md` | Affected sections |
 | AM4 | If changing inputs/outputs, update consumer/producer entries | [C] | `.omp/agents/README.md` | Agent Coordination Matrix |
-| AM5 | If changing the name, update all references (SKILL.md, WORKFLOW_PHASE, etc.) | [M] | Multiple files | Grep for old name |
+| AM5 | If changing the name, update all references (SKILL.md, mode/reference, etc.) | [M] | Multiple files | Grep for old name |
 
 ---
 
@@ -105,14 +105,14 @@ After completing each item, note the status: Done, Skipped (with reason), or N/A
 | M10 | Add branch to Documentation Loading Decision Tree | [M] | `.omp/skills/daaf-orchestrator/SKILL.md` | Documentation Loading Decision Tree code block |
 | M11 | Add mode-specific boundaries | [M] | `agent_reference/BOUNDARIES.md` | Mode-Specific Boundaries section |
 | M12 | Update README.md mode count and table | [M] | `README.md` | Engagement Modes section |
-| M13 | Add mode subsection to user_reference/02 | [M] | `user_reference/02_understanding_daaf.md` | The N Engagement Modes section (header, TOC, intro, subsection, transition table) |
+| M13 | Document the mode in root `README.md` (this port has no `user_reference/02_*.md`) | [M] | `README.md` | Modes / usage |
 | M14 | Add mode-specific AI disclosure guidance | [M] | `agent_reference/AI_DISCLOSURE_REFERENCE.md` | Mode-Specific Disclosure Guidance section |
 | M15 | Update session-recovery.md with recovery pattern | [M] | `.omp/skills/daaf-orchestrator/references/session-recovery.md` | Purpose section + conditional recovery steps |
 | M16 | (Handled by OMP harness — no DAAF-level error recovery needed) | — | — | — |
 | M17 | (Handled by OMP harness — no DAAF-level state template needed) | — | — | — |
-| M19 | Add FAQ entry if mode is likely to generate user questions | [C] | `user_reference/07_faq_technical.md` | New Q&A entry |
-| M20 | Add progressive testing level entry | [C] | `user_reference/02_understanding_daaf.md` | Progressive testing levels section |
-| M21 | Update user_reference/04 if mode affects extension model | [C] | `user_reference/04_extending_daaf.md` | Relevant section |
+| M19 | FAQ: update `README.md` or support-mode refs (no `user_reference/07_*.md` in this port) | [C] | `README.md` / `user-support-mode.md` | Q&A |
+| M20 | Progressive orientation lives in mode files + README (no `user_reference/02`) | [C] | `README.md` / mode refs | Orientation |
+| M21 | Extension-model notes: this package ships zero OMP extensions; document in README | [C] | `README.md` | Packaging |
 
 ### Modifying an Existing Mode
 
@@ -123,7 +123,7 @@ After completing each item, note the status: Done, Skipped (with reason), or N/A
 | MM3 | If changing outputs, update Mode Summary Table | [C] | `.omp/skills/daaf-orchestrator/SKILL.md` | Mode Summary Table |
 | MM4 | If changing escalation paths, update both directions | [C] | `.omp/skills/daaf-orchestrator/SKILL.md` | Mode Escalation Paths |
 | MM5 | If changing boundaries, update BOUNDARIES.md | [C] | `agent_reference/BOUNDARIES.md` | Mode-Specific Boundaries |
-| MM6 | If changing user-facing description, update user_reference/02 | [C] | `user_reference/02_understanding_daaf.md` | Mode subsection |
+| MM6 | If changing user-facing description, update root `README.md` (no `user_reference/` in this port) | [C] | `README.md` | Modes / usage |
 
 ---
 
@@ -135,10 +135,10 @@ After completing each item, note the status: Done, Skipped (with reason), or N/A
 |---|------|-----|------|--------------------|
 | R1 | Create file in `agent_reference/` with clear purpose statement | [M] | `agent_reference/{file-name}.md` | First paragraph states purpose and audience |
 | R2 | Add to AGENTS.md Reference Files table | [M] | `AGENTS.md` | Reference Files table |
-| R3 | Add trigger conditions ("When to Read") in all referencing documents | [M] | Various | Agent Section 12, WORKFLOW_PHASE files, orchestrator SKILL.md |
+| R3 | Add trigger conditions ("When to Read") in all referencing documents | [M] | Various | Agent Section 12, mode reference files, orchestrator SKILL.md |
 | R4 | Wire into Documentation Loading Decision Tree if loaded by orchestrator | [C] | `.omp/skills/daaf-orchestrator/SKILL.md` | Documentation Loading Decision Tree |
 | R5 | Wire into agent Section 12 if used by specific agents | [C] | `.omp/agents/{agent-name}.md` | Section 12: References table |
-| R6 | Wire into WORKFLOW_PHASE file if stage-specific | [C] | `agent_reference/WORKFLOW_PHASE*.md` | Progressive loading notes |
+| R6 | Wire into mode/reference file if stage-specific | [C] | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` and `.omp/agents/README.md` | Progressive loading notes |
 
 ### Modifying an Existing Reference File
 
@@ -170,7 +170,7 @@ After completing each item, note the status: Done, Skipped (with reason), or N/A
 | HS8 | Add the script to the smoke-test lists in `ci-scripts.yml` (bash, pwsh 7, PS 5.1, and the `bash:3.2` job) | [M] | `.github/workflows/ci-scripts.yml` | Smoke-tests job + bats-bash32 job. Interactive menu-loop scripts must be driven with input on stdin and any state their code paths require |
 | HS9 | Create a `.bats` (and Pester `.Tests.ps1`) unit test | [C] | `tests/bash/{name}.bats`, `tests/powershell/{name}.Tests.ps1` | Required if the script has non-trivial logic beyond a thin launcher |
 | HS10 | Add to the migration fetch list if it is a bootstrap tool users may lack | [C] | `scripts/host/migrate_daaf.sh` / `.ps1` | Only for one-time migration tooling; most scripts are covered by install + updater self-sync |
-| HS11 | Document user-facing scripts in the quickstart Quick Reference table | [C] | `user_reference/01_installation_and_quickstart.md` | Quick Reference table + relevant workflow section, if the script is meant to be run directly by users |
+| HS11 | Document user-facing scripts in root `README.md` (no quickstart `user_reference/` tree in this port) | [C] | `README.md` | Usage / scripts |
 
 > **Why the install lists are hand-maintained but the updater is not:** Fresh installs download host scripts before any repo exists on the host, so `install.sh`/`install.ps1` must name each file explicitly (there is nothing to derive a list from yet). The updater, by contrast, runs *after* pulling the new repo state into the container, so it can and does enumerate the current `scripts/host/` contents itself — making a hardcoded updater list both redundant and a recurring source of "new file silently never delivered" bugs. Register new host scripts in the two install lists; leave the updater alone.
 

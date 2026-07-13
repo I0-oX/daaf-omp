@@ -137,7 +137,7 @@ Group independent tasks into waves for parallel execution:
 
 **Rules:**
 - Same-wave tasks have no dependencies between them
-- **Maximum 5 tasks per wave** (hard limit — the orchestrator's workflowz (task batch) concurrency cap is 5; if more tasks are independent, split across waves or the orchestrator will sub-batch)
+- **Respect OMP `task.maxConcurrency`** (project/session setting; this repo often uses 4). Prefer ≤ that many truly-parallel leaf tasks per wave; topology-independent extras go in subsequent waves or are sub-batched by the orchestrator
 - Each task gets fresh subagent context
 - Next wave starts only after all prior-wave tasks complete
 
@@ -675,7 +675,7 @@ When the orchestrator prompt includes `**MODE: Ad Hoc Collaboration**`:
 
 **Invocation type:** `agent: "data-planner"`
 
-See `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for stage-specific invocation templates (standard, revision, and continuation modes).
+See `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) for stage-specific invocation templates (standard, revision, and continuation modes).
 
 ---
 

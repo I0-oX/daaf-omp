@@ -115,7 +115,7 @@ Launch **3 search-agent subagents** in parallel to thoroughly explore the releva
 **For New Agent:**
 1. **Agent ecosystem:** Read `.omp/agents/README.md`. Identify the 2-3 closest existing agents. Read their Core Distinction tables.
 2. **Integration landscape:** Read agent-authoring references and integration checklist. Identify all registration points.
-3. **Workflow context:** Read the WORKFLOW_PHASE file for the agent's target stage. Understand the invocation pattern and handoff expectations.
+3. **Workflow context:** Read the mode/reference file for the agent's target stage. Understand the invocation pattern and handoff expectations.
 
 **For New Mode:**
 1. **Existing modes survey:** Read all mode reference files (first 50-80 lines each). Identify the closest analog mode. Read it fully.

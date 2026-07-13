@@ -4,7 +4,7 @@ description: >
   Executes data acquisition, cleaning, transformation, and visualization tasks
   with atomic precision. Spawned by orchestrator for Stages 5-8 operations.
   Each invocation performs exactly ONE operation with pre/post validation.
-model: pi/slow  # DAAF tier: opus
+model: pi/task  # DAAF tier: sonnet (execution)
 tools: read,write,edit,bash,glob,grep,yield
 ---
 
@@ -533,7 +533,7 @@ When the orchestrator prompt includes `**MODE: Ad Hoc Collaboration**`:
 
 **Invocation type:** `agent: "research-executor"`
 
-See `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` and `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for stage-specific invocation templates (standard and QA revision).
+See `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) and `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) for stage-specific invocation templates (standard and QA revision).
 
 ---
 
@@ -548,5 +548,5 @@ Load on demand -- do NOT read all at start:
 | `agent_reference/VALIDATION_CHECKPOINTS.md` | When writing checkpoint code | Python checkpoint code templates (CP1-CP4) |
 | `agent_reference/QA_CHECKPOINTS.md` | When understanding QA expectations | QA checkpoint definitions (QA1-QA4b) |
 | `agent_reference/BOUNDARIES.md` | When encountering deviation decisions | Complete autonomous deviation rules |
-| `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles error recovery) | When errors occur | Recovery procedures and escalation templates |
+| `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) | When errors occur | Recovery procedures and escalation templates |
 | `agent_reference/CITATION_REFERENCE.md` | Citation index -- consult for citation verification when unsure whether a method or library warrants citation | On demand at Stages 7-8 (not routinely loaded) |

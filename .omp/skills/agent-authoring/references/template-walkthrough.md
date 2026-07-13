@@ -315,7 +315,7 @@ Before returning output, verify:
 
 ## Section 11: Invocation Pattern
 
-**What it is:** A pointer to the canonical invocation template in the appropriate `WORKFLOW_PHASE*.md` file or mode reference file.
+**What it is:** A pointer to the canonical invocation template in the appropriate `full-pipeline-mode.md / agents README` file or mode reference file.
 
 **Format:**
 ```markdown
@@ -323,14 +323,14 @@ Before returning output, verify:
 
 **Invocation type:** `agent: "[general-purpose | search-agent]"`
 
-See the appropriate `agent_reference/WORKFLOW_PHASE[N]_[NAME].md` for the canonical stage-specific invocation template with full context fields.
+See the appropriate `.omp/skills/daaf-orchestrator/references/*-mode.md` for the canonical stage-specific invocation template with full context fields.
 For agent landscape context, see `.omp/agents/README.md`.
 ```
 
 **Guidance:**
-- Do NOT include a full Agent() call template — the `agent_reference/WORKFLOW_PHASE*.md` files and mode reference files are the sources of truth for invocation templates
+- Do NOT include a full Agent() call template — the `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` and `.omp/agents/README.md` files and mode reference files are the sources of truth for invocation templates
 - Specify `agent` so readers know the agent's capability level at a glance
-- Reference the relevant WORKFLOW_PHASE file for stage-specific invocation templates (e.g., `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for Stage 5-6 agents)
+- Reference the relevant mode/reference file for stage-specific invocation templates (e.g., `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) for Stage 5-6 agents)
 - The invocation template must map to Upstream Inputs (Section 3)
 
 ---

@@ -399,7 +399,7 @@ Before returning output, verify:
 **Invocation type:** `agent: "search-agent"`
 
 The search-agent is invoked across multiple modes and stages. See:
-- `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for Stage 2 data exploration templates
+- `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) for Stage 2 data exploration templates
 - `.omp/skills/daaf-orchestrator/references/framework-development-mode.md` for Framework Development scoping templates
 - `.omp/skills/daaf-orchestrator/references/data-lookup-mode.md` for Data Lookup invocation
 - `.omp/skills/daaf-orchestrator/references/data-discovery-mode.md` for Data Discovery invocation
@@ -412,6 +412,6 @@ Load on demand — do NOT read all at start:
 
 | File | When to Read | Purpose |
 |------|-------------|---------|
-| `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | When performing Stage 2 data exploration | Discovery protocol specifics and skill invocation patterns |
+| `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) | When performing Stage 2 data exploration | Discovery protocol specifics and skill invocation patterns |
 | `agent_reference/BOUNDARIES.md` | When encountering scope boundary questions | Deviation rules and boundary specifications |
 | Any `*-data-source-*` skill | When searching involves a specific data domain | Authoritative domain knowledge for the search topic |

@@ -26,7 +26,7 @@
 **What to add:** Complete subsection with:
 - `**Use when:**` trigger description
 - `**Key behaviors:**` bulleted list (3-5 items)
-- `**Invocation template:**` reference to the appropriate `agent_reference/WORKFLOW_PHASE*.md` or mode reference file
+- `**Invocation template:**` reference to the appropriate `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` and `.omp/agents/README.md` or mode reference file
 - Any additional context (constraints, revision flow, etc.)
 
 Follow the format of existing agent subsections in this file.
@@ -79,14 +79,14 @@ Follow the format of existing agent subsections in this file.
 **Section:** "Stage Overview"
 **What to add:** New or updated row with Stage, Phase, Name, Primary Skill/Agent, Subagent type
 
-### 10. Appropriate `agent_reference/WORKFLOW_PHASE*.md` — Individual stage section
+### 10. Appropriate `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` and `.omp/agents/README.md` — Individual stage section
 
 **Condition:** Agent operates within a specific stage
 **Section:** The individual stage section (e.g., "Stage 7: EDA & Transformation")
 **What to add:** Agent/subagent subsection or update to existing section
-**Phase mapping:** Stages 1-3.5 → `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md`, Stages 4-4.5 → `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md`, Stages 5-6 → `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md`, Stages 7-10 → `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md`, Stages 11-12 → `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md`
+**Phase mapping:** Stages 1-3.5 → `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native), Stages 4-4.5 → `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native), Stages 5-6 → `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native), Stages 7-10 → `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native), Stages 11-12 → `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native)
 
-### 11. Appropriate `agent_reference/WORKFLOW_PHASE*.md` — Stage invocation template
+### 11. Appropriate `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` and `.omp/agents/README.md` — Stage invocation template
 
 **Condition:** Agent has a unique invocation template not covered by existing patterns
 **Section:** Add new stage-specific template section in the appropriate phase file
@@ -99,7 +99,7 @@ Follow the format of existing agent subsections in this file.
 **Section:** "Orchestration Flow" (ASCII diagram)
 **What to add:** Agent box in the relevant position
 
-### 13. `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` — Error Recovery Routing
+### 13. `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) — Error Recovery Routing
 
 **Condition:** Agent handles specific error types or participates in error recovery
 **Section:** "Error Recovery Routing"
@@ -108,7 +108,7 @@ Follow the format of existing agent subsections in this file.
 ### 14. Agent file — `skills:` frontmatter field
 
 **Condition:** Agent uses one or more skills during execution
-**What to add:** Ensure the agent's `skills:` frontmatter field lists preloaded skills. Stage-specific skill loading is documented in the agent's Protocol section and the corresponding `agent_reference/WORKFLOW_PHASE*.md` invocation templates.
+**What to add:** Ensure the agent's `skills:` frontmatter field lists preloaded skills. Stage-specific skill loading is documented in the agent's Protocol section and the corresponding `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` and `.omp/agents/README.md` invocation templates.
 
 ---
 
@@ -118,16 +118,16 @@ Follow the format of existing agent subsections in this file.
 
 | # | File | Update Condition |
 |---|------|-----------------|
-| 15 | Appropriate `agent_reference/WORKFLOW_PHASE*.md` | Agent implements or extends a workflow phase |
+| 15 | Appropriate `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` and `.omp/agents/README.md` | Agent implements or extends a workflow phase |
 | 16 | `agent_reference/BOUNDARIES.md` | Agent has special deviation authority or unique boundaries |
 | 17 | `agent_reference/VALIDATION_CHECKPOINTS.md` | Agent runs validation checkpoints |
 | 18 | `agent_reference/QA_CHECKPOINTS.md` | Agent participates in QA review |
-| 19 | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Agent handles specific error types |
+| 19 | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) | Agent handles specific error types |
 | 20 | `AGENTS.md` > "Context & Session Health" | Agent has special context considerations |
 | 21 | `full-pipeline-mode.md` > "Learning Signal Protocol" | Agent generates learning signals |
 | 22 | `agent_reference/PLAN_TEMPLATE.md` | Agent reads or writes Plan.md |
 | 23 | `agent_reference/PLAN_TASKS_TEMPLATE.md` | Agent reads or writes Plan_Tasks.md |
-| 24 | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Agent affects STATE.md fields |
+| 24 | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) | Agent affects STATE.md fields |
 | 25 | `user_reference/02_understanding_daaf.md` | Agent changes the architecture description for users |
 | 26 | `user_reference/04_extending_daaf.md` | Agent enables new extension patterns |
 | 27 | `user_reference/07_faq_technical.md` | Agent affects common technical questions |
@@ -208,23 +208,23 @@ done
 - [ ] full-pipeline-mode.md — Handoff Specifications (if affects gates)
 - [ ] full-pipeline-mode.md — Stage Gates table (if new/modified gate)
 - [ ] full-pipeline-mode.md — Stage Overview (if stage-specific)
-- [ ] agent_reference/WORKFLOW_PHASE*.md — Individual stage section (if stage-specific)
-- [ ] agent_reference/WORKFLOW_PHASE*.md — Stage invocation template (if unique invocation template)
+- [ ] .omp/skills/daaf-orchestrator/references/full-pipeline-mode.md + .omp/agents/README.md — Individual stage section (if stage-specific)
+- [ ] .omp/skills/daaf-orchestrator/references/full-pipeline-mode.md + .omp/agents/README.md — Stage invocation template (if unique invocation template)
 - [ ] .omp/agents/README.md — Orchestration Flow diagram (if changes workflow)
-- [ ] WORKFLOWZ_DAG_SPECIFICATION.md — Error Recovery Routing (if handles errors)
+- [ ] full-pipeline-mode.md — Error Recovery Routing (if handles errors)
 - [ ] Agent file — `skills:` frontmatter field (if uses skills)
 
 ### Tier 3: CONDITIONAL (review applicability)
-- [ ] Appropriate agent_reference/WORKFLOW_PHASE*.md (if implements workflow phase)
+- [ ] Appropriate .omp/skills/daaf-orchestrator/references/full-pipeline-mode.md + .omp/agents/README.md (if implements workflow phase)
 - [ ] agent_reference/BOUNDARIES.md (if special boundaries)
 - [ ] agent_reference/VALIDATION_CHECKPOINTS.md (if runs checkpoints)
 - [ ] agent_reference/QA_CHECKPOINTS.md (if participates in QA)
-- [ ] WORKFLOWZ_DAG_SPECIFICATION.md (if handles error types)
+- [ ] full-pipeline-mode.md (if handles error types)
 - [ ] AGENTS.md > "Context & Session Health" (if special context needs)
 - [ ] full-pipeline-mode.md > "Learning Signal Protocol" (if generates learning signals)
 - [ ] agent_reference/PLAN_TEMPLATE.md (if reads/writes Plan.md)
 - [ ] agent_reference/PLAN_TASKS_TEMPLATE.md (if reads/writes Plan_Tasks.md)
-- [ ] WORKFLOWZ_DAG_SPECIFICATION.md (if affects STATE.md)
+- [ ] full-pipeline-mode.md (if affects STATE.md)
 - [ ] user_reference/02_understanding_daaf.md (if changes architecture)
 - [ ] user_reference/04_extending_daaf.md (if enables new extensions)
 - [ ] user_reference/07_faq_technical.md (if affects FAQs)

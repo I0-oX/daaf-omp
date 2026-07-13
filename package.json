@@ -1,9 +1,8 @@
 {
   "name": "daaf-omp",
-  "version": "1.0.0",
-  "description": "Data Analyst Augmentation Framework (DAAF) integration for Oh My Pi (OMP)",
+  "version": "1.0.1",
+  "description": "Data Analyst Augmentation Framework (DAAF) agents, skills, and research methodology for Oh My Pi (OMP)",
   "type": "module",
-  "main": "./.omp/extensions/daaf-statusline.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DAAF-Contribution-Community/daaf-omp.git"
@@ -13,14 +12,15 @@
     "oh-my-pi",
     "daaf",
     "data-analysis",
-    "agentic"
+    "agentic",
+    "research"
   ],
   "author": "DAAF Contribution Community",
   "license": "LGPL-3.0-or-later",
   "omp": {
     "name": "daaf-omp",
-    "version": "1.0.0",
-    "description": "DAAF cost-control, safety rules, and statusline extensions for OMP",
+    "version": "1.0.1",
+    "description": "DAAF agents, skills, and methodology assets for OMP (no custom extensions)",
     "extensions": []
   }
 }

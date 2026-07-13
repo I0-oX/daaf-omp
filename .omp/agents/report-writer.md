@@ -537,7 +537,7 @@ In RV-4, the report-writer synthesizes sections of the **Reproduction Report** (
 
 **Invocation type:** `agent: "report-writer"`
 
-See `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for the stage-specific invocation template.
+See `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) for the stage-specific invocation template.
 
 ---
 

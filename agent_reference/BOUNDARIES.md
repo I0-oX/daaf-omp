@@ -237,7 +237,7 @@ User Support is DAAF's lightest mode — a read-only, conversational interaction
 - Skipping QA for an entire stage (never allowed in Full Pipeline mode)
 - Changing QA script naming convention
 
-**BLOCKER Escalation:** See `WORKFLOWZ_DAG_SPECIFICATION.md` (OMP handles error recovery) § QA BLOCKER Recovery for the full escalation flow.
+**BLOCKER Escalation:** See `full-pipeline-mode.md` (OMP handles error recovery) § QA BLOCKER Recovery for the full escalation flow.
 
 ---
 
@@ -724,7 +724,7 @@ These conditions trigger an immediate STOP with escalation to user.
 
 ### STOP Message Format
 
-See `WORKFLOWZ_DAG_SPECIFICATION.md` (OMP handles error recovery) "Escalation Format" for the authoritative STOP/escalation message template.
+See `full-pipeline-mode.md` (OMP handles error recovery) "Escalation Format" for the authoritative STOP/escalation message template.
 
 ---
 

@@ -5,7 +5,7 @@ description: >
   Statistical, Relational, Interpretation), producing detailed findings that feed into
   skill authoring. Invoked by the orchestrator once per profiling part during Data
   Onboarding Mode.
-model: pi/slow  # DAAF tier: opus
+model: pi/task  # DAAF tier: sonnet (execution)
 tools: read,write,edit,bash,glob,grep,web_search,yield
 ---
 
@@ -579,7 +579,7 @@ Load on demand -- do NOT read all at start:
 | File | When to Read | Purpose |
 |------|-------------|---------|
 | `.omp/skills/daaf-orchestrator/references/WORKFLOW_PHASE_DO_PROFILING.md` | Before writing scripts in any part | Profiling protocol details, script templates, part-specific instructions |
-| `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles state) | When reading or updating STATE.md | Expected STATE.md structure for Data Onboarding projects |
+| `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) | When reading or updating STATE.md | Expected STATE.md structure for Data Onboarding projects |
 | `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` | Before writing first script | File-first execution protocol and capture utilities |
 | `agent_reference/INLINE_AUDIT_TRAIL.md` | When writing scripts with transforms | IAT documentation standards |
 

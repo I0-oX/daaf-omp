@@ -256,7 +256,7 @@ Shows which agents produce output consumed by other agents:
 
 ## When to Use Each Agent
 
-> For stage-specific invocation templates with full context fields, see the corresponding `agent_reference/WORKFLOW_PHASE*.md` files.
+> For stage-specific invocation templates with full context fields, see the corresponding `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` and `.omp/agents/README.md` files.
 
 ### research-executor
 
@@ -281,7 +281,7 @@ Closely read `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for the mandatory f
 
 **Ad Hoc Collaboration:** In Ad Hoc mode, research-executor writes scripts to `scripts/adhoc/` instead of stage-based directories. Plan.md is replaced by orchestrator-provided task context. See `ad-hoc-collaboration-mode.md` for the invocation pattern.
 
-**Invocation template:** See the appropriate WORKFLOW_PHASE*.md or mode reference file for stage-specific invocation templates.
+**Invocation template:** See the appropriate full-pipeline-mode.md / agents README or mode reference file for stage-specific invocation templates.
 
 ---
 
@@ -297,7 +297,7 @@ Closely read `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for the mandatory f
 
 **Ad Hoc Collaboration:** In Ad Hoc mode, data-planner produces an Advisory Outline (not full Plan.md + Plan_Tasks.md) from user-provided context instead of formal Stage 2-3 findings. See `ad-hoc-collaboration-mode.md`.
 
-**Invocation template:** See the appropriate WORKFLOW_PHASE*.md or mode reference file for stage-specific invocation templates.
+**Invocation template:** See the appropriate full-pipeline-mode.md / agents README or mode reference file for stage-specific invocation templates.
 
 ---
 
@@ -315,7 +315,7 @@ Closely read `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for the mandatory f
 
 **Reproducibility Verification (RV-3):** In RV mode, data-verifier performs adversarial cross-checking of the original Report's claims against reproduced outputs. It RETURNS findings to the orchestrator (read-only) — it does not write the Reproduction Report directly. See `reproducibility-verification-mode.md` for the invocation template.
 
-**Invocation template:** See the appropriate WORKFLOW_PHASE*.md or mode reference file for stage-specific invocation templates.
+**Invocation template:** See the appropriate full-pipeline-mode.md / agents README or mode reference file for stage-specific invocation templates.
 
 ---
 
@@ -329,7 +329,7 @@ Closely read `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for the mandatory f
 - Uncertainty documentation with confidence levels
 - Actionable guidance structured for data-planner consumption
 
-**Invocation template:** See the appropriate WORKFLOW_PHASE*.md or mode reference file for stage-specific invocation templates.
+**Invocation template:** See the appropriate full-pipeline-mode.md / agents README or mode reference file for stage-specific invocation templates.
 
 ---
 
@@ -353,7 +353,7 @@ Closely read `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for the mandatory f
 
 **Ad Hoc Collaboration:** In Ad Hoc mode, the debugger accepts user-provided scripts and error descriptions directly, without Plan.md. Diagnostic output is more explanatory since the user is the audience. See `ad-hoc-collaboration-mode.md`.
 
-**Invocation template:** See the appropriate WORKFLOW_PHASE*.md or mode reference file for stage-specific invocation templates.
+**Invocation template:** See the appropriate full-pipeline-mode.md / agents README or mode reference file for stage-specific invocation templates.
 
 ---
 
@@ -369,7 +369,7 @@ Closely read `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for the mandatory f
 - Non-blocking (identifies issues but doesn't fix)
 - Methodology precision enforcement
 
-**Invocation template:** See the appropriate WORKFLOW_PHASE*.md or mode reference file for stage-specific invocation templates.
+**Invocation template:** See the appropriate full-pipeline-mode.md / agents README or mode reference file for stage-specific invocation templates.
 
 ---
 
@@ -384,7 +384,7 @@ Closely read `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for the mandatory f
 - Pitfall identification with mitigation
 - Truth Hierarchy application for discrepancies
 
-**Invocation template:** See the appropriate WORKFLOW_PHASE*.md or mode reference file for stage-specific invocation templates.
+**Invocation template:** See the appropriate full-pipeline-mode.md / agents README or mode reference file for stage-specific invocation templates.
 
 ---
 
@@ -430,7 +430,7 @@ Closely read `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for the mandatory f
 
 **Verification:** If output contains `mo.ui.dropdown`, `mo.ui.slider`, `group_by` outside scripts, or `filter` in data cells -> REJECT and re-run
 
-**Invocation template:** See the appropriate WORKFLOW_PHASE*.md or mode reference file for stage-specific invocation templates.
+**Invocation template:** See the appropriate full-pipeline-mode.md / agents README or mode reference file for stage-specific invocation templates.
 
 ---
 
@@ -447,7 +447,7 @@ Closely read `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for the mandatory f
 
 **Reproducibility Verification (RV-4):** In RV mode, report-writer synthesizes the Reproduction Report by writing the Executive Summary, Methodological Concerns Synthesis, and overall assessment. See `reproducibility-verification-mode.md` for the invocation template.
 
-**Invocation template:** See the appropriate WORKFLOW_PHASE*.md or mode reference file for stage-specific invocation templates.
+**Invocation template:** See the appropriate full-pipeline-mode.md / agents README or mode reference file for stage-specific invocation templates.
 
 ---
 
@@ -462,7 +462,7 @@ Closely read `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for the mandatory f
 - Orphan detection
 - E2E flow verification
 
-**Invocation template:** See the appropriate WORKFLOW_PHASE*.md or mode reference file for stage-specific invocation templates.
+**Invocation template:** See the appropriate full-pipeline-mode.md / agents README or mode reference file for stage-specific invocation templates.
 
 ---
 
@@ -521,7 +521,7 @@ code-reviewer returns BLOCKER
 
 **Ad Hoc Collaboration:** In Ad Hoc mode, code-reviewer can review user-provided scripts that may lack execution logs or Plan.md context. Methodology alignment is evaluated against the user's stated intent rather than a formal Plan. See `ad-hoc-collaboration-mode.md`.
 
-**Invocation template:** See the appropriate WORKFLOW_PHASE*.md or mode reference file for stage-specific invocation templates.
+**Invocation template:** See the appropriate full-pipeline-mode.md / agents README or mode reference file for stage-specific invocation templates.
 
 ---
 
@@ -542,7 +542,7 @@ code-reviewer returns BLOCKER
 - Returns part-specific profiling findings with confidence assessment
 - Skill authoring is NOT performed by this agent (handled at Stage DI-7 by a separate subagent)
 
-**Invocation template:** See the appropriate WORKFLOW_PHASE*.md or mode reference file for stage-specific invocation templates.
+**Invocation template:** See the appropriate full-pipeline-mode.md / agents README or mode reference file for stage-specific invocation templates.
 
 ---
 

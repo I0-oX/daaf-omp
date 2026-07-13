@@ -61,7 +61,7 @@ Data Onboarding is designed for **tabular datasets** — files with rows and col
 │  Stage DI-2: Project Setup                                                  │
 │      ├─ Create research project folder under research/                       │
 │      ├─ Copy raw data into research project data/raw/                        │
-│      ├─ Initialize STATE.md from agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md (OMP harness handles state)   │
+│      ├─ Initialize STATE.md from .omp/skills/daaf-orchestrator/references/full-pipeline-mode.md (OMP harness handles state)   │
 │      ├─ Initialize LEARNINGS.md                                             │
 │      ├─ Verify {BASE_DIR}/scripts/run_with_capture.sh is accessible          │
 │      └─ Gate GDI-2: Project folder ready, STATE.md initialized              │
@@ -436,7 +436,7 @@ Return findings in this structure (max 3500 words):
 |------|-------------|----------|---------|
 | GDI-0 | DI-0 | API key verified, data downloaded, file non-empty, acquisition script archived | API auth fails, empty response, rate limited (conditional — only if access method = API) |
 | GDI-1 | DI-1 | Required inputs collected, file(s) accessible and non-empty, access method determined, file structure classified | File cannot be loaded, file empty, required inputs missing, or API acquisition failed |
-| GDI-2 | DI-2 | Project folder created, STATE.md initialized (from `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles state)), data staged | Folder creation fails |
+| GDI-2 | DI-2 | Project folder created, STATE.md initialized (from `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native)), data staged | Folder creation fails |
 | GDI-3 | DI-3 | CPP1 PASSED, QAP1 PASSED or WARNING | File >1GB without sampling plan approved by user, or critical columns entirely null |
 | GDI-4 | DI-4 | CPP2 PASSED, QAP2 PASSED or WARNING | >50% of columns are entirely null |
 | GDI-5 | DI-5 | CPP3 PASSED, QAP3 PASSED or WARNING | No candidate keys identifiable across any table |
@@ -471,7 +471,7 @@ For EACH profiling part (DI-3 through DI-6), follow this complete cycle. **Do NO
 │      │   conditional script decisions (Part A only), learning signals.     │
 │      │                                                                      │
 │      │   Write the full, unmodified agent return to markdown file on disk  │
-│      │   (see Preliminary Notes Persistence in WORKFLOW_PHASE docs)        │
+│      │   (see Preliminary Notes Persistence in mode/reference docs)        │
 │      │                                                                      │
 │      └─ WAIT for data-ingest subagent to return before proceeding          │
 ├─────────────────────────────────────────────────────────────────────────────┤
@@ -545,7 +545,7 @@ For EACH profiling part (DI-3 through DI-6), follow this complete cycle. **Do NO
 **Stage DI-8 (Review & Delivery):** Finalizes STATE.md and consolidates LEARNINGS.md as described in the Output Format section. The LEARNINGS.md consolidation protocol for DI-8:
 1. Review LEARNINGS.md entries captured during profiling phases (DI-3 through DI-6)
 2. Ensure **Access/Data Gotchas** and **Data Quality Notes** sections are populated — these are the most relevant sections for onboarding work, since profiling surfaces source-specific quirks that future analyses need to know about
-3. If profiling revealed issues with existing skills, agent protocols, or templates (e.g., "the data source skill template does not account for a pattern we discovered"), add a **System Update Action Plan** section following the same format as Full Pipeline (see `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md`). Keep it lightweight — only include genuinely generalizable improvements, not project-specific observations.
+3. If profiling revealed issues with existing skills, agent protocols, or templates (e.g., "the data source skill template does not account for a pattern we discovered"), add a **System Update Action Plan** section following the same format as Full Pipeline (see `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native)). Keep it lightweight — only include genuinely generalizable improvements, not project-specific observations.
 4. If no generalizable framework updates were identified, add a brief statement: "No generalizable framework updates identified during this onboarding."
 5. Include the action plan item count (or zero) in the delivery message
 
@@ -825,7 +825,7 @@ research/YYYY-MM-DD_{Source_Name}_Onboarding/
 1. **Stage DI-2:** Create the research project folder under `research/`
 2. **Create `data/raw/`** and **`output/preliminary_notes/`** subdirectories inside the research project
 3. **Copy** user-provided data files into `data/raw/`
-4. **Initialize STATE.md** from `{BASE_DIR}/agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md (OMP harness handles state)` — this template has onboarding-specific sections (DI-1 through DI-8 stages, Profiling Progress table, Interpretation Tracking, Skill Authoring Status) that differ from the Full Pipeline template. Populate the Data Source Info and User Request sections with intake information.
+4. **Initialize STATE.md** from `{BASE_DIR}/.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md (OMP harness handles state)` — this template has onboarding-specific sections (DI-1 through DI-8 stages, Profiling Progress table, Interpretation Tracking, Skill Authoring Status) that differ from the Full Pipeline template. Populate the Data Source Info and User Request sections with intake information.
 5. **Instruct user** if files need manual placement (e.g., files too large to copy, or user prefers to place them directly)
 
 ---

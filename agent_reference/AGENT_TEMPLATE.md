@@ -18,44 +18,41 @@ description: >
   [Third person. What it does AND when to use it.]
   Example: "Reviews executed scripts for correctness, methodology alignment,
   and data integrity. Invoked after each Stage 5-8 script execution."
-tools: [read, write, edit, bash, glob, grep, read]   # Explicit allowlist. Omit for all.
-permissionMode: default                          # Or: plan (read-only agents)
-model: sonnet            # DAAF two-tier routing: opus | sonnet (see "Model Field" below)
+tools: [read, write, edit, bash, glob, grep, yield]   # Explicit OMP allowlist. Omit for all.
+# permissionMode is Claude-era; prefer explicit tools allowlists for read-only agents
+model: pi/task            # OMP model role: pi/slow (high-judgment) | pi/task (execution)
 # ── Optional fields ──
 # maxTurns: 50
 # skills: skill-a          # Skill to preload at startup (full content injected)
 # skills:                  # Multiple skills use YAML block list:
 #   - skill-a
 #   - skill-b
-# memory: project          # user | project | local
-# hooks:                   # Per-agent extension registration (scoped to this agent only)
-#   tool_call:
-#     - matcher: "bash"
-#       hooks:
-#         - type: command
-#           command: "<project root>/.omp/extensions/hook-name.sh"
-#           timeout: 5
+# memory: project          # user | project | local (if harness supports agent memory)
+# Note: this port does not register per-agent shell hooks under .omp/extensions/.
+# File-first capture and bash hygiene are DAAF instructional policy, not extension hooks.
 ---
 ```
 
 #### Model Field
 
-The `model:` field is **expected on every DAAF agent** — it sets the model tier the orchestrator dispatches the agent on by default.
+The `model:` field is **expected on every DAAF agent** — it sets the default OMP model role the agent runs on when dispatched via `task`.
 
-**Valid values:** `sonnet`, `opus`, `haiku`, `fable`, a full model ID (e.g. `claude-opus-4-8`), or `inherit`. Omitting the field is equivalent to `inherit` (tracks the main session model).
+**Preferred values for this port:** `pi/slow` or `pi/task` (resolved through `modelRoles` in OMP settings). Full provider model ids are also valid when intentionally pinning one model. Use `inherit` only when the agent must track the parent session model.
 
-**DAAF policy — two tiers only:** assign `opus` or `sonnet`. Haiku is excluded: "turn count beats token price" — the cheapest models take 2-3× the turns on multi-step research work, costing more overall and degrading reliability, so `sonnet` is the floor. Choose the tier by the agent's core workload:
+**DAAF policy — two judgment tiers, mapped to OMP roles:**
 
-- **`opus`** — high-judgment, adversarial, or synthesis roles (plan design, plan/data verification, code review, hypothesis-driven debugging, cross-file framework consistency, stakeholder report synthesis).
-- **`sonnet`** — well-specified, skill-guided, or mechanical roles (fetching/cleaning/transforming from a plan, structured source lookup, dataset profiling, verbatim notebook assembly, systematic reference tracing, broad read-only exploration).
+- **High-judgment** (docs historically said `opus`) → **`pi/slow`**: plan design, plan/data verification, code review, hypothesis-driven debugging, framework consistency, stakeholder report synthesis.
+- **Execution** (docs historically said `sonnet`) → **`pi/task`**: plan-driven fetch/clean/transform, source lookup, dataset profiling, verbatim notebook assembly, wiring checks, broad read-only exploration.
 
-**`inherit` is reserved** for the rare agent that must deliberately track the session model rather than pin a tier.
+Haiku-class “cheapest model” pinning is excluded by policy: multi-step research work takes more turns and usually costs more with worse reliability.
 
-The frontmatter tier is a *default floor*, not a cap: the orchestrator may override any dispatch via the task tool's per-dispatch `model` parameter (which outranks frontmatter), and a session-model ceiling is enforced by the OMP extension. For the full per-agent routing table, escalation/downgrade rules, and the ceiling rule, see `.omp/skills/daaf-orchestrator/SKILL.md` > "Model Selection for Subagent Dispatch".
+Frontmatter is a default, not an immutable cap. Whatever model override surface the active OMP `task` tool exposes may still pin a different model. There is **no** separate DAAF model-ceiling extension in this port.
+
+For the per-agent routing table, see `.omp/skills/daaf-orchestrator/SKILL.md` → “Default Model Tiers”.
 
 #### Dispatch Mode
 
-DAAF dispatches agents via OMP's `task` tool batch mode — **workflowz**. Batches carry a shared `context` across parallel agents in a wave, and the concurrency semaphore limits parallel dispatches to 5. See `.omp/skills/daaf-orchestrator/SKILL.md` > "OMP Tool Integration (workflowz)" for the canonical dispatch contract.
+DAAF dispatches agents via OMP’s native `task` tool (batch mode with shared `context`). Concurrency is bounded by OMP `task.maxConcurrency` (this repo often sets 4). See `.omp/skills/daaf-orchestrator/SKILL.md` → “Dispatch” and `omp://tools/task.md`.
 
 ### Section 1: Title and Purpose (REQUIRED)
 
@@ -415,14 +412,14 @@ Before returning output, verify:
 
 **Invocation type:** `agent: "[agent-name]"`
 
-The stage-specific invocation template with full context fields is in the relevant `agent_reference/WORKFLOW_PHASE[N]_[NAME].md` or mode reference file (paths relative to the project root).
+The stage-specific invocation template with full context fields is in the relevant `.omp/skills/daaf-orchestrator/references/*-mode.md` or mode reference file (paths relative to the project root).
 ```
 
 **Guidelines:**
 - Specifies the `agent` for quick reference
-- References the relevant WORKFLOW_PHASE file or mode reference file for stage-specific context fields and invocation templates
+- References the relevant mode/reference file or mode reference file for stage-specific context fields and invocation templates
 - The invocation template must map to Upstream Inputs (Section 3)
-- Do NOT duplicate the full task() call syntax here — that lives in the WORKFLOW_PHASE or mode reference files
+- Do NOT duplicate the full task() call syntax here — that lives in the mode/reference or mode reference files
 
 ---
 

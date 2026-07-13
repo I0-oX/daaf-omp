@@ -113,7 +113,7 @@ Version suffixes follow the convention defined in `AGENTS.md` > "Version Control
 **Refresh Mode:** Replace prior stage output with new findings.
 **Additive Mode:** Supplement prior output with additional findings.
 
-The canonical re-run decision trees live in `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles error recovery). The table above is a quick reference for revision-specific scenarios.
+The canonical re-run decision trees live in `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native). The table above is a quick reference for revision-specific scenarios.
 
 For stages that need re-execution, load `{SKILL_REFS}/full-pipeline-mode.md` and follow the relevant stage's Composite Execution Pattern. All QA requirements from the full pipeline apply to re-executed stages.
 
@@ -127,12 +127,12 @@ When re-executing pipeline stages for a revision, load these files based on the 
 
 | Re-Entry Stage | Load These Files | Key Sections |
 |----------------|-----------------|--------------|
-| Stage 2-3 (Discovery) | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Stage 2/3 invocation templates, gate criteria |
-| Stage 4-4.5 (Planning) | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | data-planner invocation, plan-checker validation |
-| Stage 5-6 (Acquisition) | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Fetch/clean invocation templates + QA pattern |
-| Stage 7-8 (Analysis) | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Transform/analysis templates + QA pattern |
-| Stage 9-10 (Assembly) | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Notebook assembly, QA aggregation |
-| Stage 11-12 (Synthesis) | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | Report generation, final review |
+| Stage 2-3 (Discovery) | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) | Stage 2/3 invocation templates, gate criteria |
+| Stage 4-4.5 (Planning) | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) | data-planner invocation, plan-checker validation |
+| Stage 5-6 (Acquisition) | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) | Fetch/clean invocation templates + QA pattern |
+| Stage 7-8 (Analysis) | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) | Transform/analysis templates + QA pattern |
+| Stage 9-10 (Assembly) | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) | Notebook assembly, QA aggregation |
+| Stage 11-12 (Synthesis) | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) | Report generation, final review |
 | Any stage | `full-pipeline-mode.md` | QA enforcement protocol, invocation templates, context checklists |
 
 **Progressive loading:** Only load the phase file for the re-entry point and any downstream phases. Do not load all phase files at once.
@@ -211,7 +211,7 @@ If the original report predates the AI Use Disclosure section (i.e., was created
 
 ## Subagent Invocation
 
-Revision and Extension mode reuses the standard invocation templates from the relevant `WORKFLOW_PHASE*.md` file for each re-executed stage. Construct subagent prompts using:
+Revision and Extension mode reuses the standard invocation templates from the relevant `full-pipeline-mode.md / agents README` file for each re-executed stage. Construct subagent prompts using:
 
 1. **Base:** The stage-specific invocation template from the appropriate phase file (see Re-Entry File Loading table above)
 2. **Augment:** Add the REVISION CONTEXT block (see Revision-Specific Subagent Context above) to every subagent prompt
@@ -236,10 +236,10 @@ No revision-specific invocation templates are needed — the standard templates 
 **Step 5: Load references.**
 - `revision-and-extension-mode.md` (already loaded)
 - `full-pipeline-mode.md` (for composite execution pattern and QA enforcement)
-- `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (for Stage 7-8 invocation templates)
-- `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (for Stage 11-12 templates)
+- `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native)
+- `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native)
 
-**Step 6: Dispatch subagents.** For each re-executed stage, use the standard invocation template from the relevant WORKFLOW_PHASE file, adding the Revision Context block:
+**Step 6: Dispatch subagents.** For each re-executed stage, use the standard invocation template from the relevant mode/reference file, adding the Revision Context block:
 
 ```
 ## REVISION CONTEXT

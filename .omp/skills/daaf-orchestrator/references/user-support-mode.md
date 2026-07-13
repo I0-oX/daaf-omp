@@ -13,7 +13,7 @@ After mode confirmation, briefly orient the user:
 
 **When to skip:** User has asked a single, clearly scoped question that can be answered immediately without extended conversation.
 
-**For more detail:** Consult `{BASE_DIR}/user_reference/02_understanding_daaf.md`.
+**For more detail:** Consult `{BASE_DIR}/README.md` and `.omp/skills/daaf-orchestrator/SKILL.md`.
 
 ---
 
@@ -48,18 +48,16 @@ There are no mandatory checkpoints, gates, or phase transitions. The user drives
 
 ## Documentation Loading Protocol
 
-**On mode entry**, the orchestrator reads these four documents in full (parallel reads):
+**On mode entry**, the orchestrator reads these documents (parallel reads where practical). This OMP port does **not** ship a `user_reference/` tree — use repo docs instead:
 
 | Document | Purpose | Path |
 |----------|---------|------|
-| README | Project overview, capabilities, mode table, architecture summary | `{BASE_DIR}/README.md` |
-| Installation & Quick Start | Setup, prerequisites, troubleshooting, day-to-day workflow | `{BASE_DIR}/user_reference/01_installation_and_quickstart.md` |
-| Understanding DAAF | Context windows, modes, mental model, anatomy of an analysis, session management | `{BASE_DIR}/user_reference/02_understanding_daaf.md` |
-| Best Practices | Effective prompts, reviewing output, human oversight, appropriate use | `{BASE_DIR}/user_reference/03_best_practices.md` |
+| README | Project overview, capabilities, agent table, OMP vs DAAF ownership | `{BASE_DIR}/README.md` |
+| AGENTS.md | Execution philosophy, safety layers, conventions | `{BASE_DIR}/.omp/AGENTS.md` |
+| Orchestrator skill | Mode classification + dispatch contract | `{BASE_DIR}/.omp/skills/daaf-orchestrator/SKILL.md` |
+| Mode references | Per-mode workflows under the orchestrator skill | `{BASE_DIR}/.omp/skills/daaf-orchestrator/references/*-mode.md` |
 
-These documents total approximately 2,000 lines and provide comprehensive coverage of the most common user questions. The orchestrator should be thoroughly familiar with their contents before responding to any question.
-
-**Context budget note:** Loading these four documents consumes approximately 8,000-12,000 tokens of orchestrator context. This is acceptable because User Support does not dispatch subagents, load skills, or accumulate execution artifacts -- the documentation *is* the working material.
+Load additional `agent_reference/*` templates only when the user asks about planning/QA/report mechanics.
 
 ---
 
@@ -73,9 +71,9 @@ For questions that go beyond the four pre-loaded documents -- questions about DA
 |----------------|---------------|
 | How a specific mode works | `.omp/skills/daaf-orchestrator/references/{mode-name}-mode.md` |
 | Mode routing and classification | `.omp/skills/daaf-orchestrator/SKILL.md` > Mode Decision Framework |
-| What happens at each pipeline stage | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` through `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` |
+| What happens at each pipeline stage | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` |
 | Session recovery / resuming work | `.omp/skills/daaf-orchestrator/references/session-recovery.md` |
-| Error recovery protocols | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles error recovery) |
+| Error recovery protocols | OMP-native session/task recovery plus mode/agent escalation notes (no separate ERROR_RECOVERY.md) |
 
 ### Agents and Subagents
 
@@ -106,7 +104,7 @@ For questions that go beyond the four pre-loaded documents -- questions about DA
 | Validation checkpoint code | `agent_reference/VALIDATION_CHECKPOINTS.md` |
 | AI disclosure and attribution | `agent_reference/AI_DISCLOSURE_REFERENCE.md` |
 | Citation practices | `agent_reference/CITATION_REFERENCE.md` |
-| State file templates | `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles state), `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (OMP harness handles state) |
+| State file templates | `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native), `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) |
 | Reproduction report template | `agent_reference/REPRODUCTION_REPORT_TEMPLATE.md` |
 | Full reference file index | `AGENTS.md` > Reference Files table |
 

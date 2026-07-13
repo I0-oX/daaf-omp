@@ -1,7 +1,12 @@
-# DAAF project configuration for OMP (Oh My Pi)
-# Ported from .claude/settings.json
-# This port diverges from the original DAAF (DAAF-Contribution-Community/daaf).
-#
-# Skills are auto-discovered from .omp/skills/*/SKILL.md
-# No explicit config needed — skills discovered automatically.
+modelRoles:
+  default: openrouter/x-ai/grok-4.5
+  advisor: openrouter/openai/gpt-5.6-sol:medium
 
+advisor:
+  enabled: true
+
+cycleOrder:
+  - default
+
+task:
+  maxConcurrency: 4

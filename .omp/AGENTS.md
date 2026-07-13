@@ -46,8 +46,8 @@ These principles apply to all agents writing code in the DAAF system:
   Interactive execution bypasses the audit trail and produces no permanent record
   that can be reviewed by code-reviewer. Never run `python script.py` directly.
   See `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for the complete protocol.
-  The file-first protocol blocks direct `python`/`python3` execution
-  programmatically.
+  File-first is a DAAF policy (instruction + audit trail via
+  `run_with_capture.sh`), not an OMP runtime hard-block of `python`/`python3`.
 - **Inline Audit Trail (IAT):** Every filter, join, aggregation, and derived
   column must have inline comments using `# INTENT:`, `# REASONING:`, and
   `# ASSUMES:` prefixes documenting intent, reasoning, and assumptions. Sparse
@@ -152,7 +152,7 @@ context prevents misinterpretation of the target section.
 OMP manages context compaction automatically (`omp://compaction.md`). Use the `/compact` command for manual compaction when needed. OMP's native context monitor provides utilization data; follow its severity levels for gating decisions. Session context is fully managed by OMP — no manual monitoring or threshold tables needed in DAAF.
 ## Boundaries & Safety
 
-> **Safety guardrails are enforced programmatically by OMP extensions (tool_call/tool_result handlers) and settings deny rules.** They are documented here for transparency — the extensions block violations regardless of instructions.
+> **Safety is layered:** OMP provides native tool policies (bash interceptor, deny/approval settings, session storage). DAAF adds instructional policies (file-first capture, one-command bash calls, scope boundaries). This port runs **without custom DAAF extensions/hooks** — do not assume missing once-present shell enforcers still exist.
 
 ### Credential & Secret Protection
 
@@ -173,7 +173,7 @@ OMP manages context compaction automatically (`omp://compaction.md`). Use the `/
 ### Provenance Boundary
 
 - You MUST NEVER write working files to `/tmp` (redirects, `cp`/`mv`/`tee`/`mkdir`/`touch`, downloads, `sed -i`, archive extraction, or `git clone` targeting `/tmp`). `/tmp` is outside the backup boundary and the audit trail. Temporary and intermediate files belong inside the project (see § Project Conventions > Scratch Files).
-- **Exception — reads are fine:** DAAF's own extensions legitimately cache coordination state in `/tmp`. *Reading* those caches via `bash` is permitted; only *writes* to `/tmp` are blocked.
+- **Exception — reads are fine:** Reading existing paths under `/tmp` (e.g. OMP runtime caches) is permitted; only *writes* of working files to `/tmp` are prohibited.
 
 ### Repository & Remote Safety
 
@@ -187,17 +187,16 @@ OMP manages context compaction automatically (`omp://compaction.md`). Use the `/
 
 ### Defense-in-Depth Architecture
 
-|---|---|---|
-| **OMP Bash Safety** | OMP's `bash` tool safety guard | Destructive commands, privilege escalation, pipe-to-shell, data exfiltration, container escape, the `/tmp` provenance guard |
-| **OMP Tool Enforcement** | OMP's single-command enforcement | Blocks chaining (`&&`, `\|\|`, `;`, newlines). Enforces "One Command Per Call" |
-| **OMP File-First Protocol** | `run_with_capture.sh` wrapper + OMP tool restrictions | Blocks direct `python`/`python3` execution; enforces file-first audit trail |
-| **OMP Model Ceiling** | OMP's dispatch model tier check | Blocks subagent dispatches above session model tier |
-| **OMP Audit Trail** | OMP native audit logging (`tool_result` handler) | Audit trail for every tool invocation |
-| **OMP Output Scanner** | OMP secret detection (`tool_result` handler) | Secret detection in tool output |
-| **OMP Context Monitor** | OMP's context monitoring (see `omp://compaction.md`) | Context utilization for gating decisions (orchestrator + subagents) |
-| **OMP Session Archiver** | OMP's session archiving (`session_shutdown`) | Session transcript archiving on exit |
-| **OMP Session Recovery** | OMP's session recovery (`session_start`) | Activity logging + crash recovery |
-| **OMP Configuration** | OMP's config-based restrictions | Destructive commands, credential file reads/writes blocked at config level |
+| Layer | Owner | What it actually does |
+|-------|-------|------------------------|
+| Bash tool interceptor | OMP native | Redirects shell misuse of `cat`/`grep`/`find`/`sed -i`/redirect writes to specialized tools (settings-driven) |
+| Tool approval / deny | OMP settings | `tools.approvalMode`, per-tool allow/deny/prompt |
+| Session + compaction | OMP native | JSONL sessions, `/compact`, auto-compaction (`omp://session.md`, `omp://compaction.md`) |
+| Subagent dispatch | OMP `task` | Concurrency via `task.maxConcurrency`, isolation, artifact `agent://` outputs |
+| Model roles | OMP settings + agent frontmatter | `modelRoles.*` and agent `model:` (e.g. `pi/slow`, `pi/task`) — not a separate “ceiling hook” |
+| File-first + capture | **DAAF policy** | Instructional: write scripts, run via `scripts/run_with_capture.sh`, append execution logs for QA |
+| One-command bash | **DAAF policy** | Instructional hygiene for auditability; not an OMP hard ban on `&&`/`;`/`\|\|` |
+| IAT / QA checkpoints | **DAAF quality layer** | Documentation + validation standards OMP does not provide |
 
 ---
 
@@ -210,7 +209,7 @@ OMP manages context compaction automatically (`omp://compaction.md`). Use the `/
 - **Wrong:** `mkdir -p /path && cp file /path && ls /path`
 - **Right:** Three separate `bash` calls, each with one command
 
-OMP's single-command enforcement blocks chained commands programmatically.
+Treat chaining as a DAAF policy violation even though OMP does not universally harden against every `&&`/`;`/`||` form. Prefer separate tool calls.
 
 ### Shell Script Permissions
 
@@ -285,7 +284,7 @@ See `agent_reference/SCRIPT_EXECUTION_REFERENCE.md` for complete script template
 | `agent_reference/REPORT_TEMPLATE.md` | Output report template |
 | `agent_reference/AI_DISCLOSURE_REFERENCE.md` | AI use attribution and GUIDE-LLM checklist mapping |
 | `agent_reference/REPRODUCTION_REPORT_TEMPLATE.md` | Reproduction Report template (Reproducibility Verification mode) |
-| `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | workflowz DAG orchestration specification (replaces WORKFLOW_PHASE*.md) |
+| `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` | Full Pipeline stage map + dispatch context (OMP `task`) |
 | `agent_reference/BOUNDARIES.md` | Agent boundary definitions |
 | `agent_reference/CITATION_REFERENCE.md` | Citation index for pipeline citation propagation and verification |
 | `agent_reference/DATA_SOURCE_SKILL_TEMPLATE.md` | Data source skill authoring template |

@@ -20,24 +20,18 @@ Use this template when adding a new engagement mode to the DAAF orchestrator. A 
    - [ ] Reference File Index — add new row
    - [ ] Documentation Loading Decision Tree — add new branch
 3. Add mode-specific boundaries to `agent_reference/BOUNDARIES.md` > Mode-Specific Boundaries
-4. Update `README.md` — mode count word + new table row
-5. Update `user_reference/02_understanding_daaf.md`:
-   - [ ] Section header — update count word
-   - [ ] TOC entry — update to match header
-   - [ ] Introductory paragraph — update count word
-   - [ ] Add mode subsection (Trigger words, What it is, What you get, When to use, When NOT to use)
-   - [ ] Mode transition table — add rows for escalation paths
+4. Update `README.md` — document the mode and when to use it
+5. Update root `README.md` / `.omp/AGENTS.md` orientation text if the mode changes the public surface of DAAF-on-OMP
 6. Add mode-specific AI disclosure guidance to `agent_reference/AI_DISCLOSURE_REFERENCE.md`
 7. Update session recovery in `.omp/skills/daaf-orchestrator/references/session-recovery.md`
 
 ### Conditional
 
-8. Add mode-specific references to `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` (if mode has a non-trivial dispatch DAG)
-(OMP harness handles error recovery, state persistence, session archiving, and context management natively — no DAAF templates needed for these.)
-10. Update `AGENTS.md` Reference Files table (if new template file created)
-11. Update `CONTRIBUTING.md` (if mode affects contribution workflow)
-12. Update `user_reference/07_faq_technical.md` (if mode is likely to generate FAQ questions)
-13. Update `user_reference/04_extending_daaf.md` (if mode affects extension model)
+8. Add mode-specific references to `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` or the relevant `*-mode.md` only when that mode’s DAG needs it (dispatch is OMP `task`)
+9. (OMP owns error recovery / state / session archiving / compaction — do not reintroduce deleted STATE/ERROR templates)
+10. Update `AGENTS.md` Reference Files table (if a new template file is created)
+11. Update contribution docs (if present and the mode affects contribution workflow)
+12. Prefer extending `README.md` FAQs over reintroducing a `user_reference/` tree; this port does not ship `user_reference/`
 
 ---
 
@@ -59,7 +53,7 @@ After mode confirmation, briefly orient the user. Key points:
 
 **When to skip:** User has indicated familiarity, or [mode-specific skip condition].
 
-**For more detail:** Consult `{BASE_DIR}/user_reference/02_understanding_daaf.md`.
+**For more detail:** Consult `{BASE_DIR}/README.md` and `.omp/skills/daaf-orchestrator/SKILL.md`.
 
 ---
 

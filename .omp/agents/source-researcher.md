@@ -467,7 +467,7 @@ Before returning output, verify:
 
 **Invocation type:** `agent: "source-researcher"`
 
-See `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` and `data-lookup-mode.md` for stage-specific invocation templates.
+See `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) and `data-lookup-mode.md` for stage-specific invocation templates.
 
 ---
 
@@ -477,6 +477,6 @@ Load on demand — do NOT read all at start:
 
 | File | When to Read | Purpose |
 |------|-------------|---------|
-| `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | When Discovery protocol details needed | Discovery protocol specifics |
-| `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` | When unsure which skill to load | Skill invocation patterns and available skills |
+| `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) | When Discovery protocol details needed | Discovery protocol specifics |
+| `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) | When unsure which skill to load | Skill invocation patterns and available skills |
 | `agent_reference/BOUNDARIES.md` | When encountering scope boundary questions | Deviation rules and boundary specifications |

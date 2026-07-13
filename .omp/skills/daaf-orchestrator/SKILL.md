@@ -109,13 +109,14 @@ Full spec in `.omp/agents/README.md`.
 
 ### Default Model Tiers
 
-| Tier | Agents |
-|------|--------|
-| `opus` | data-planner, plan-checker, code-reviewer, data-verifier, debugger, framework-engineer, report-writer |
-| `sonnet` | research-executor, source-researcher, research-synthesizer, data-ingest, notebook-assembler, integration-checker, search-agent |
+Map DAAF judgment tiers onto OMP model roles via agent frontmatter `model:`:
 
-OMP's ceiling hook denies dispatches above the session model tier. Per-dispatch
-`model` override available.
+| DAAF tier (docs) | OMP role | Agents |
+|------------------|----------|--------|
+| high-judgment (`opus`) | `pi/slow` | data-planner, plan-checker, code-reviewer, data-verifier, debugger, framework-engineer, report-writer |
+| execution (`sonnet`) | `pi/task` | research-executor, source-researcher, research-synthesizer, data-ingest, notebook-assembler, integration-checker, search-agent |
+
+Resolve aliases via `modelRoles` in OMP settings (`omp://settings.md`). There is no separate model-ceiling hook. Per-call model overrides are only whatever the active OMP `task` surface supports.
 
 ---
 

@@ -1,125 +1,136 @@
 # DAAF for OMP (Oh My Pi)
 
-This is a port of the [Data Analyst Augmentation Framework (DAAF)](https://github.com/DAAF-Contribution-Community/daaf) from Claude Code to OMP (Oh My Pi). **This port diverges from the original**: Claude Code‑specific hooks (permissions, model‑ceiling, etc.) were deliberately omitted — they have no equivalent in OMP and would be dead code.
+Port of the [Data Analyst Augmentation Framework (DAAF)](https://github.com/DAAF-Contribution-Community/daaf) to [OMP (Oh My Pi)](https://github.com/nicobailon/oh-my-pi).
 
-## What is DAAF?
+**This is not a 1:1 Claude Code port.** Claude-only hooks, shell enforcers, and a second orchestration layer that OMP already owns were removed. DAAF here is:
 
-DAAF is a free and open-source instructions framework that helps skilled researchers deepen and extend their expertise across any domain of data analysis with AI assistance — while enhancing the transparency, rigor, and reproducibility that good science demands.
+- domain skills + agent protocols
+- research methodology (modes, stages, QA, IAT, file-first capture)
+- dispatch via OMP’s native `task` tool
+
+OMP owns: sessions, compaction, tool interception settings, subagent concurrency, model roles.
 
 ## Structure
 
-```
+```text
 daaf-omp/
 ├── .omp/
-│   ├── AGENTS.md                    # Project context (ported from CLAUDE.md)
-│   ├── config.yml                   # OMP config: extensions list, settings
-│   ├── extensions/                  # 13 OMP extensions (ported from .claude/hooks/*.sh)
-│   │   ├── daaf-hook-runner.ts       # Shared helper: spawns shell hooks with JSON stdin
-│   │   ├── daaf-bash-safety.ts       # Blocks dangerous bash commands
-│   │   ├── daaf-enforce-single-command.ts  # Blocks command chaining (&&, ;, ||)
-│   │   ├── daaf-enforce-file-first.ts      # Enforces run_with_capture.sh wrapper
-│   │   ├── daaf-audit-log.ts               # Audit trail logging
-│   │   ├── daaf-output-scanner.ts          # Secret detection in tool output
-│   │   ├── daaf-context-reporter.ts        # Context utilization injection
-│   │   ├── daaf-remind-orchestrator.ts     # Reminds to load orchestrator skill
-│   │   ├── daaf-archive-session.ts         # Session transcript archiving
-│   │   ├── daaf-recover-session-logs.ts    # Crash recovery
-│   │   ├── daaf-flag-orchestrator-loaded.ts
-│   │   ├── daaf-deny-claude-code-guide.ts
-│   │   ├── daaf-enforce-explore-model.ts
-│   │   └── daaf-statusline.ts              # Live status bar (model, dir, ctx usage)
-│   ├── hooks/                       # 13 shell hooks (safety logic, invoked by extensions)
-│   ├── skills/                      # 36 skills (data sources, methods, tools)
-│   └── agents/                      # 14 agent definition files (behavioral protocols)
-├── agent_reference/                 # 22 reference docs (templates, workflows, checkpoints)
-└── scripts/                         # Utility scripts (run_with_capture.sh, log viewer, etc.)
+│   ├── AGENTS.md                 # Project DAAF context (auto-loaded)
+│   ├── config.yml                # Project OMP settings (models, advisor, …)
+│   ├── agents/                   # 14 specialist agent definitions
+│   ├── skills/                   # Domain + method skills (SKILL.md)
+│   └── scripts/run_with_capture.sh  # Packaged copy of capture wrapper
+├── scripts/
+│   └── run_with_capture.sh       # Canonical capture wrapper (use this path)
+├── agent_reference/              # Templates, QA, validation, IAT, …
+├── setup.sh                      # Copy assets into another OMP project
+└── package.json                  # Plugin metadata (no custom extensions)
 ```
 
-## Key Design Decisions
+## What OMP owns vs DAAF
 
-### Extension Architecture
-DAAF's original 14 Claude Code hooks (`.claude/hooks/*.sh`) are battle-tested shell scripts with complex regex/awk logic. Rather than rewriting all logic in TypeScript (risking bugs in security-critical code), each OMP extension is a **thin adapter** that:
-1. Intercepts the appropriate OMP event (`tool_call`, `tool_result`, `session_start`, `session_shutdown`)
-2. Builds the JSON payload the shell hook expects
-3. Spawns the shell hook via `daaf-hook-runner.ts`
-4. Maps exit code 2 → `{ block: true, reason }` (OMP's block contract)
+| Concern | Owner |
+|---------|--------|
+| Session JSONL, resume, tree | OMP |
+| Compaction / context monitoring | OMP |
+| `task` dispatch, `task.maxConcurrency` | OMP |
+| Model roles (`pi/slow`, `pi/task`, …) | OMP settings + agent frontmatter |
+| Bash misuse interceptor (cat/grep/find → tools) | OMP settings |
+| File-first + `run_with_capture.sh` | **DAAF policy** (audit trail) |
+| IAT, QA1–QA4b, checkpoints CP1–CP4 | **DAAF quality layer** |
+| Mode classification + stage methodology | **DAAF orchestrator skill** |
 
-### Path Mapping
-| Claude Code | OMP |
-|---|---|
-| `.claude/` | `.omp/` |
-| `CLAUDE.md` | `AGENTS.md` |
-| `.claude/settings.json` | `.omp/config.yml` |
-| `.claude/hooks/` | `.omp/extensions/` (TS) + `.omp/hooks/` (shell) |
-| `$CLAUDE_PROJECT_DIR` | `$(pwd)` |
-| `Bash`/`Read`/`Edit`/etc. (tool) | `bash`/`read`/`edit`/etc. |
-| `PreToolUse`/`PostToolUse` | `tool_call`/`tool_result` |
-| `Skill` tool | `read skill://<name>` |
+There are **no** DAAF TypeScript extensions or `.omp/hooks/` shell enforcers in this tree.
 
-### Skills
-Skills were copied directly — OMP and Claude Code use the same `SKILL.md` frontmatter format (`name`, `description`). The 36 skills (data sources, Python libraries, methodologies) are domain knowledge that is harness-agnostic.
+## Agents
 
-### Agents
-14 specialist agents are discovered from `.omp/agents/` and invocable via the `task` tool:
+Discovered from `.omp/agents/*.md`, invoked with OMP `task` (`agent: "<name>"`).
 
-| Agent | Model Tier | Tools | Role |
-|---|---|---|---|
-| `code-reviewer` | pi/slow | read,write,edit,bash,glob,grep | QA review of executed scripts |
-| `data-ingest` | pi/slow | +web_search | Tabular dataset profiling (4-part) |
-| `data-planner` | pi/slow | read,write,edit,bash,glob,grep | Analysis plan creation |
-| `data-verifier` | pi/slow | read,bash,glob,grep | Adversarial goal-backward verification |
-| `debugger` | pi/slow | +web_search | Diagnosis and root-cause analysis |
-| `framework-engineer` | pi/slow | read,write,edit,bash,glob,grep | Framework skill/component authoring |
-| `integration-checker` | pi/task | read,bash,glob,grep | Cross-artifact wiring verification |
-| `notebook-assembler` | pi/task | read,write,edit,bash,glob,grep | Jupyter notebook assembly |
-| `plan-checker` | pi/slow | read,bash,glob,grep | Six-dimension plan validation |
-| `report-writer` | pi/slow | read,write,edit,bash,glob,grep | Structured research report generation |
-| `research-executor` | pi/slow | read,write,edit,bash,glob,grep | Atomic Stage 5-8 task execution |
-| `research-synthesizer` | pi/task | read,write,edit,bash,glob,grep | Cross-source synthesis |
-| `search-agent` | pi/task | read,bash,glob,grep,web_search | Broad exploration across sources |
-| `source-researcher` | pi/task | read,bash,glob,grep | Deep single-source investigation |
+| Agent | Model role | Role |
+|-------|------------|------|
+| `code-reviewer` | `pi/slow` | Per-script QA |
+| `data-planner` | `pi/slow` | Plan.md + Plan_Tasks.md |
+| `plan-checker` | `pi/slow` | Six-dimension plan validation |
+| `data-verifier` | `pi/slow` | Final adversarial review |
+| `debugger` | `pi/slow` | Root-cause diagnosis |
+| `framework-engineer` | `pi/slow` | Framework artifact edits |
+| `report-writer` | `pi/slow` | Stakeholder report |
+| `research-executor` | `pi/task` | Atomic Stage 5–8 execution |
+| `data-ingest` | `pi/task` | Onboarding profiling |
+| `notebook-assembler` | `pi/task` | Marimo compile of executed scripts |
+| `integration-checker` | `pi/task` | Wiring checks |
+| `research-synthesizer` | `pi/task` | Cross-source synthesis |
+| `search-agent` | `pi/task` | Broad exploration |
+| `source-researcher` | `pi/task` | Single-source deep dive |
 
-Usage: `task(agent: "research-executor", ...)` or `task(agent: "code-reviewer", ...)`.
-Model mapping: DAAF `opus` tier → `pi/slow` (most capable), DAAF `sonnet` tier → `pi/task` (standard subagent).
+DAAF docs still say “opus/sonnet” as judgment tiers; frontmatter maps them to OMP roles `pi/slow` / `pi/task` via your `modelRoles` in settings.
+
+## File-first capture
+
+Research Python is never “run to show me”. Protocol:
+
+```bash
+bash scripts/run_with_capture.sh {PROJECT_DIR}/scripts/stage5_fetch/01_example.py
+```
+
+Full protocol: `agent_reference/SCRIPT_EXECUTION_REFERENCE.md`.
 
 ## Usage
 
-### Option A: Standalone Project (Template Mode)
-If you want to run DAAF directly inside this repository:
+### Standalone (this repo)
+
 ```bash
-# From this directory, launch OMP
+cd /path/to/daaf-omp
 omp
 ```
-The 13 extensions load automatically, 36 skills are discovered, and `.omp/AGENTS.md` provides the DAAF context.
 
-### Option B: Install as an OMP Plugin (Global/Project Mode)
-To use DAAF extensions and safety hooks in an existing OMP project, install it as a plugin:
+Loads `.omp/AGENTS.md`, discovers agents/skills. Configure models in `.omp/config.yml` and/or `~/.omp/agent/config.yml`.
+
+### Copy assets into another project
+
 ```bash
-# Install via Git (GitHub)
-omp plugin install github:DAAF-Contribution-Community/daaf-omp
-
-# Or link a local clone
-omp plugin link /path/to/daaf-omp
+./setup.sh /path/to/your-project
 ```
 
-This registers and loads all 13 TS extensions and shell hooks. To fully utilize the DAAF agents and skills, you should copy the respective `.omp/agents/`, `.omp/skills/`, and `.omp/AGENTS.md` files into your project's `.omp/` folder.
+Copies agents, skills, `AGENTS.md`, `scripts/`, and `agent_reference/`.
 
-You can automate this configuration copy by running the local setup utility:
-```bash
-# Run from the plugin directory to copy assets to your target project CWD
-./setup.sh
+Optional plugin metadata (`package.json` → `omp`) is present for install conventions, but this package ships **zero custom extensions**.
+
+### Credentials / data-source API keys
+
+Do **not** put API keys in committed project files or create `.env` from research scripts.
+
+Typical host-injection pattern (dockerized DAAF hosts):
+
+1. On the **host**, set keys in `environment_settings.txt` (often from `environment_settings_example.txt`).
+2. Recreate/restart the runtime so keys are injected as environment variables.
+3. Scripts read them with `os.environ["KEY_NAME"]`.
+
+For pure OMP desktop/native sessions, export the same variables in the shell/profile that launches `omp`, or use your provider auth flow (`omp` provider auth / env vars documented in `omp://providers.md` and `omp://environment-variables.md`).
+
+Skill templates that need a key must name the exact env var in their Prerequisites table.
+
+### Advisor (optional)
+
+Advisor needs **both**:
+
+```yaml
+advisor:
+  enabled: true
+modelRoles:
+  advisor: openrouter/openai/gpt-5.6-sol:medium   # thinking with ':' not '-'
 ```
+
+Invalid: `…/gpt-5.6-sol-low` (treated as a model id that does not exist).
+See `/advisor status` inside a session (`omp://advisor-watchdog.md`).
 
 ## Verification
 
-- All 13 extension TS files pass `bun --check` (syntax valid)
-- All 13 shell hooks pass `bash -n` (syntax valid)
-- `run_with_capture.sh` tested end-to-end: executes Python, captures output, appends execution log
-- `config.yml` is valid YAML with 13 extensions registered
-- 36 skills discovered from `.omp/skills/*/SKILL.md`
-- 14 agents discovered from `.omp/agents/*.md` with valid frontmatter (name, description, tools, model)
-- No residual functional Claude Code path references (only porting-origin comments remain)
+- [x] No `.omp/extensions/` or `.omp/hooks/` enforcers
+- [x] `scripts/run_with_capture.sh` present + executable
+- [x] Agents/skills under `.omp/` with frontmatter
+- [x] Orchestration refs point at `full-pipeline-mode.md` + OMP `task` (not deleted WORKFLOW_PHASE files)
 
 ## License
 
-LGPL-3.0-or-later (same as upstream DAAF)
+LGPL-3.0-or-later (same as upstream DAAF).

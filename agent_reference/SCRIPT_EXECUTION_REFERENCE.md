@@ -86,11 +86,11 @@ If the script went through versioned revisions (Step 4), commit **all** versions
 
 ### Location and Setup
 
-The canonical wrapper lives at the **repo root**: `{BASE_DIR}/scripts/run_with_capture.sh` (i.e., `/daaf/scripts/run_with_capture.sh`).
+The canonical wrapper lives at the **repo root**: `{BASE_DIR}/scripts/run_with_capture.sh` (a second copy may exist at `.omp/scripts/` for plugin packaging; agents must use the root `scripts/` path).
 
 All scripts reference this single canonical copy directly — there is no need to copy it into individual project directories. This avoids drift and ensures every project uses the same version.
 
-**Executable permission required:** `run_with_capture.sh` must have its executable bit set both on the filesystem (`chmod +x`) and in Git's index (`git update-index --chmod=+x`). The file's mode in `git ls-files -s` must be `100755`. Without this, `./run_with_capture.sh` invocations will fail, and clones of the repository will receive a non-executable copy. The same requirement applies to OMP session archiving and any other `.sh` utility in `scripts/`.
+**Executable permission required:** `run_with_capture.sh` must have its executable bit set both on the filesystem (`chmod +x`) and in Git's index (`git update-index --chmod=+x`). The file's mode in `git ls-files -s` must be `100755`. Without this, `./run_with_capture.sh` invocations will fail, and clones of the repository will receive a non-executable copy. The same executable-bit requirement applies to other `.sh` utilities under `scripts/`.
 
 ### What It Does
 

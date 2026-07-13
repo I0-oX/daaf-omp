@@ -335,12 +335,12 @@ Evaluate plan scope against context budget thresholds:
 | Metric | Target | Warning | Blocker |
 |--------|--------|---------|---------|
 | Tasks total | 5-10 | 10-20 | 25+ |
-| Tasks/wave | 2-4 | 5 (hard max) | 6+ |
+| Tasks/wave | 2-4 | > task.maxConcurrency | >> task.maxConcurrency |
 | Transformations/task | 2-3 | 4 | 5+ |
 | Total context est. | ~50% | ~70% | 80%+ |
 
 **Red flags:**
-- Wave with 6+ parallel tasks (violates workflowz hard max of 5 concurrent dispatches — BLOCKER)
+- Wave fan-out far above OMP `task.maxConcurrency` without an intentional sub-batch plan (BLOCKER if it assumes unlimited parallel reality)
 - Single task with 5+ transformation steps (should split)
 - Analysis crammed into one task (fetch + clean + join + aggregate)
 - Overly granular (20+ tiny tasks for simple analysis)
@@ -654,7 +654,7 @@ Before returning output, verify:
 
 **Invocation type:** `agent: "plan-checker"`
 
-See `agent_reference/WORKFLOWZ_DAG_SPECIFICATION.md` for the stage-specific invocation template and post-validation action table.
+See `.omp/skills/daaf-orchestrator/references/full-pipeline-mode.md` (dispatch via OMP `task`; error recovery is OMP-native) for the stage-specific invocation template and post-validation action table.
 
 ## References
 
